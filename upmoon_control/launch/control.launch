@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Load robot description -->
+  <include file="$(find upmoon_description)/launch/description.launch" />
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find upmoon_control)/config/control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="state_controller
+              diff_drive_controller
+              ankles_left_controller
+              ankles_right_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher" />
+
+</launch>

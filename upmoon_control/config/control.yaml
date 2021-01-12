@@ -1,0 +1,35 @@
+state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+ankles_left_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - ankle_lf_joint
+    - ankle_lm_joint
+    - ankle_lb_joint
+
+ankles_right_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - ankle_rf_joint
+    - ankle_rm_joint
+    - ankle_rb_joint
+
+diff_drive_controller:
+  type: "diff_drive_controller/DiffDriveController"
+  left_wheel: ['wheel_lf_joint', 'wheel_lm_joint', 'wheel_lb_joint']
+  right_wheel: ['wheel_rf_joint', 'wheel_rm_joint', 'wheel_rb_joint']
+  publish_rate: 50
+  base_frame_id: "base_link"
+  odom_frame_id: "odom"
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  wheel_separation: 0.495
+  wheel_radius: 0.165
+
+  # Odometry covariances for the encoder output of the robot. These values should
+  # be tuned to your robot's sample odometry data, but these values are a good place
+  # to start
+  pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+  twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
