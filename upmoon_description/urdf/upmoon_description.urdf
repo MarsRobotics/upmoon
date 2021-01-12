@@ -157,7 +157,7 @@
     <child
       link="wheel_lf_link" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 -1 0" />
   </joint>
   <transmission name="wheel_lf_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -281,7 +281,7 @@
     <child
       link="wheel_lm_link" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 -1 0" />
   </joint>
   <transmission name="wheel_lm_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -405,7 +405,7 @@
     <child
       link="wheel_lb_link" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 -1 0" />
   </joint>
   <transmission name="wheel_lb_trans">
     <type>transmission_interface/SimpleTransmission</type>
