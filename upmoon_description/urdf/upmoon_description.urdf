@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="upmoon">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.020329 2.3465E-09 0.28591"
+        rpy="0 0 0" />
+      <mass
+        value="6.9543" />
+      <inertia
+        ixx="0.081151"
+        ixy="-3.9214E-09"
+        ixz="-0.026195"
+        iyy="0.31318"
+        iyz="4.3114E-10"
+        izz="0.36231" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="ankle_lf_link">
+    <inertial>
+      <origin
+        xyz="-2.22044604925031E-16 -0.0554425788361456 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056713"
+        ixy="-5.47281175631613E-19"
+        ixz="-4.16744139109356E-19"
+        iyy="0.00166301817426074"
+        iyz="-0.000501932714163738"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lf_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lf_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_lf_joint"
+    type="continuous">
+    <origin
+      xyz="0.39333 0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_lf_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_lf_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_lf_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_lf_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_lf_link">
+    <inertial>
+      <origin
+        xyz="-1.11022302462516E-16 0.0635 1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350881"
+        ixy="1.5605162651139E-19"
+        ixz="6.23180432713856E-19"
+        iyy="0.00853365922353221"
+        iyz="-4.21851364054712E-19"
+        izz="0.00675983988350881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lf_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lf_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_lf_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_lf_link" />
+    <child
+      link="wheel_lf_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_lf_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_lf_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_lf_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="ankle_lm_link">
+    <inertial>
+      <origin
+        xyz="5.55111512312578E-17 -0.0554425788361452 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056713"
+        ixy="-2.10945751927331E-20"
+        ixz="-1.07438080557644E-20"
+        iyy="0.00166301817426074"
+        iyz="-0.000501932714163738"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lm_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_lm_joint"
+    type="continuous">
+    <origin
+      xyz="-0.035934 0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_lm_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_lm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_lm_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_lm_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_lm_link">
+    <inertial>
+      <origin
+        xyz="-2.77555756156289E-17 0.0635 1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350881"
+        ixy="1.02243039778557E-19"
+        ixz="-6.10688344738352E-19"
+        iyy="0.00853365922353221"
+        iyz="-8.58134619313326E-21"
+        izz="0.00675983988350881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lm_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_lm_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_lm_link" />
+    <child
+      link="wheel_lm_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_lm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_lm_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_lm_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="ankle_lb_link">
+    <inertial>
+      <origin
+        xyz="8.32667268468867E-17 -0.0554425788361456 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056713"
+        ixy="-1.00834710764583E-19"
+        ixz="-6.61417645039752E-20"
+        iyy="0.00166301817426074"
+        iyz="-0.000501932714163739"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lb_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_lb_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_lb_joint"
+    type="continuous">
+    <origin
+      xyz="-0.41873 0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_lb_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_lb_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_lb_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_lb_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_lb_link">
+    <inertial>
+      <origin
+        xyz="-2.77555756156289E-17 0.0635 0"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350881"
+        ixy="-1.38168356719149E-19"
+        ixz="4.36164364250201E-19"
+        iyy="0.0085336592235322"
+        iyz="2.30270606740052E-19"
+        izz="0.00675983988350881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lb_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_lb_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_lb_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_lb_link" />
+    <child
+      link="wheel_lb_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_lb_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_lb_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_lb_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="ankle_rf_link">
+    <inertial>
+      <origin
+        xyz="1.11022302462516E-16 0.0554425788361456 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056714"
+        ixy="-4.13907677100432E-19"
+        ixz="3.11569712245013E-19"
+        iyy="0.00166301817426074"
+        iyz="0.000501932714163739"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rf_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rf_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_rf_joint"
+    type="continuous">
+    <origin
+      xyz="0.39333 -0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_rf_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_rf_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_rf_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_rf_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_rf_link">
+    <inertial>
+      <origin
+        xyz="0 -0.0634999999999999 -1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350882"
+        ixy="-1.12473578604354E-19"
+        ixz="-1.25004024262758E-19"
+        iyy="0.00853365922353221"
+        iyz="-8.67811043273137E-20"
+        izz="0.00675983988350881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rf_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rf_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_rf_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_rf_link" />
+    <child
+      link="wheel_rf_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_rf_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_rf_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_rf_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="ankle_rm_link">
+    <inertial>
+      <origin
+        xyz="1.38777878078145E-16 0.0554425788361446 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056713"
+        ixy="-2.86732537090208E-19"
+        ixz="2.95641698652251E-19"
+        iyy="0.00166301817426074"
+        iyz="0.000501932714163738"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rm_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_rm_joint"
+    type="continuous">
+    <origin
+      xyz="-0.035934 -0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_rm_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_rm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_rm_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_rm_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_rm_link">
+    <inertial>
+      <origin
+        xyz="2.77555756156289E-17 -0.0635 0"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350881"
+        ixy="-2.00877775622719E-19"
+        ixz="-9.24742333906929E-19"
+        iyy="0.00853365922353221"
+        iyz="-1.24658504086238E-19"
+        izz="0.00675983988350881" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rm_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_rm_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_rm_link" />
+    <child
+      link="wheel_rm_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_rm_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_rm_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_rm_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="ankle_rb_link">
+    <inertial>
+      <origin
+        xyz="1.11022302462516E-16 0.0554425788361455 -0.113686624298986"
+        rpy="0 0 0" />
+      <mass
+        value="1.04774515766299" />
+      <inertia
+        ixx="0.00322324069056713"
+        ixy="-3.18820056139109E-19"
+        ixz="2.4167914372682E-19"
+        iyy="0.00166301817426074"
+        iyz="0.000501932714163738"
+        izz="0.002605091688403" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rb_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/ankle_rb_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_rb_joint"
+    type="continuous">
+    <origin
+      xyz="-0.41873 -0.18733 0.15178"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="ankle_rb_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <transmission name="ankle_rb_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_rb_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="ankle_rb_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="wheel_rb_link">
+    <inertial>
+      <origin
+        xyz="0 -0.0634999999999999 0"
+        rpy="0 0 0" />
+      <mass
+        value="1.85480335178328" />
+      <inertia
+        ixx="0.00675983988350882"
+        ixy="-6.1303740424944E-20"
+        ixz="-2.39283151664608E-19"
+        iyy="0.00853365922353221"
+        iyz="-2.53875293166181E-19"
+        izz="0.00675983988350882" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rb_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/wheel_rb_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_rb_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.12954 -0.12065"
+      rpy="0 0 0" />
+    <parent
+      link="ankle_rb_link" />
+    <child
+      link="wheel_rb_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="wheel_rb_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="wheel_rb_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="wheel_rb_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link
+    name="camera_realsense_link">
+    <inertial>
+      <origin
+        xyz="-0.0128550647291507 5.52081875673238E-05 -0.00936121724707395"
+        rpy="0 0 0" />
+      <mass
+        value="0.0985136277108849" />
+      <inertia
+        ixx="7.61219529962772E-05"
+        ixy="3.74636861230566E-07"
+        ixz="5.796339324969E-07"
+        iyy="1.14796379028125E-05"
+        iyz="-2.18308426233798E-08"
+        izz="6.92443554773795E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/camera_realsense_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/camera_realsense_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_realsense_joint"
+    type="fixed">
+    <origin
+      xyz="0.44918 0.067 0.38773"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera_realsense_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="laser_hokuyo_link">
+    <inertial>
+      <origin
+        xyz="-0.00448365028731934 -7.17616410739197E-10 0.0214158148247628"
+        rpy="0 0 0" />
+      <mass
+        value="0.296744243045657" />
+      <inertia
+        ixx="0.000271610745135452"
+        ixy="-1.29503270039457E-12"
+        ixz="-1.96346195833029E-05"
+        iyy="0.000281872737876437"
+        iyz="-4.23080185617316E-12"
+        izz="0.000160350437846327" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/laser_hokuyo_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://upmoon_description/meshes/laser_hokuyo_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="laser_hokuyo_joint"
+    type="fixed">
+    <origin
+      xyz="0.45312 -0.08382 0.33685"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="laser_hokuyo_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+
+</robot>
