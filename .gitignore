@@ -4,3 +4,6 @@
 
 # Catkin custom files
 CATKIN_IGNORE
+
+*.py[cod]
+__pycache__/
