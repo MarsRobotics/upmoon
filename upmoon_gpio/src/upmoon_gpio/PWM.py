@@ -1,17 +1,19 @@
+from .MotorListener import MotorListener
 import RPi.GPIO as GPIO
 
-class PWM:
+class PWM(MotorListener):
 
     MIN_RANGE = 0
     MAX_RANGE = 100
 
-    def __init__(self, pin, freq, min_dc, max_dc, init_range, invert=False):
+    def __init__(self, topic, pin, freq, min_dc, max_dc, init_range, invert=False):
         """
         A PWM class that sets RPi pin to specified duty cycle and freqency
             
         Dependencies:
             RPi.GPIO
         Parameters:
+            topic: name of ROS topic to subscribe to
             pin: Board pin of signal (BCM)
             min_dc: Maximum duty cycle of motor (%)
             max_dc: Minimum duty cycle of motor (%)
@@ -20,6 +22,7 @@ class PWM:
             freq: frequency of PWM (hz)
             invert: reverses PWM range mapping
         """
+        super().__init__(topic)
         if (init_range < self.MIN_RANGE or init_range > self.MAX_RANGE):
             raise ValueError("init DC is not between min and max dc")
         self.min_dc = min_dc
@@ -28,11 +31,11 @@ class PWM:
         self.invert = invert
         try:
             GPIO.setmode(GPIO.BCM)
-        except Exception as e:
+        except Exception:
             print('GPIO failure')
         try:
             GPIO.setup(pin, GPIO.OUT, initial = GPIO.LOW)
-        except Exception as e:
+        except Exception:
             print('Pin setup failure')
 
         self.pwm = GPIO.PWM(pin, freq)
@@ -51,3 +54,6 @@ class PWM:
     def disable(self):
         # TODO: Doesn't disable if turning. Maybe try setting frequency to 0?
         self.pwm.ChangeDutyCycle(0)
+
+    def update(self, data):
+        self.setPosition(data)

@@ -1,9 +1,11 @@
+from .MotorListener import MotorListener
 import RPi.GPIO as GPIO
 from rospy import sleep
+import rospy
 
-class Stepper:
+class Stepper(MotorListener):
 
-    def __init__(self, disable_pin, dir_pin, step_pin, steps_per_rev=200, revs_per_turn=60, delay=0.15):
+    def __init__(self, topic, disable_pin, dir_pin, step_pin, steps_per_rev=200, revs_per_turn=60, delay=0.15):
         """
         A stepper motor class originally made for the Geckodrive G213V
             
@@ -11,6 +13,7 @@ class Stepper:
             RPi.GPIO
 
         Instance Variables:
+            topic: The ROS topic to subscribe to
             disable_pin: The pin for disabling the stepper
             dir_pin: Pin for setting the turning direction of the stepper
             step_pin: Pin for stepping the motor
@@ -18,6 +21,7 @@ class Stepper:
             revs_per_turn: How many revolutions of the motor rotor for one full rotation of the geabox rotor
             delay: the smallest delay achievable by the motor. Will not allow a delay smaller than this
         """
+        super().__init__(topic)
         self.steps_per_turn = steps_per_rev*revs_per_turn #How many steps the motor must turn to turn the output device one full revolution
         self.curr_angle = 0
         self.step_count = 0
@@ -32,15 +36,15 @@ class Stepper:
         self.delay = delay
         try:
             GPIO.setup(disable_pin, GPIO.OUT)
-        except Exception as e:
+        except Exception:
             print('Disable pin failure')
         try:
             GPIO.setup(dir_pin, GPIO.OUT)
-        except Exception as e:
+        except Exception:
             print('Direction pin failure')
         try:
             GPIO.setup(step_pin, GPIO.OUT)
-        except Exception as e:
+        except Exception:
             print('Step pin failure')
 
         self.position = 0
@@ -54,14 +58,15 @@ class Stepper:
 
     def setAngle(self, angle):
         self.curr_angle = self.position * 360 / self.steps_per_turn
-        self.step_count = self.steps_per_turn * (self.curr_angle - angle) / 360
+        self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         self.direction = 0 if self.step_count > 0 else 1
+        self.step_count = abs(self.step_count)
         GPIO.output(self.dir_pin, self.direction)
         self.running = True
         self.enable()
 
     def step(self):
-        if self.step_count == 0:
+        if self.step_count <= 0:
             self.disable()
             self.running = False
             return
@@ -77,3 +82,9 @@ class Stepper:
 
     def isRunning(self):
         return self.running
+
+    def update(self, data):
+        self.setAngle(data)
+
+    def loop(self):
+        self.step()
