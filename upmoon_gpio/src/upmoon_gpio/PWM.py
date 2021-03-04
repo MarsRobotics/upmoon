@@ -57,3 +57,6 @@ class PWM(MotorListener):
 
     def update(self, data):
         self.setPosition(data)
+
+    def loop(self):
+        pass

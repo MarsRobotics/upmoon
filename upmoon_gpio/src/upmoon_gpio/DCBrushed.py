@@ -31,3 +31,6 @@ class DCBrushed(MotorListener):
 
     def update(self, data):
         self.drive(data)
+
+    def loop(self):
+        pass
