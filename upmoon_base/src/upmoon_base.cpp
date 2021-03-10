@@ -10,6 +10,9 @@ int main(int argc, char **argv)
     upmoon_base::UPMoonHardware upmoon_hardware(nh);
     controller_manager::ControllerManager cm(&upmoon_hardware, nh);
 
+    ros::AsyncSpinner spinner(2);
+    spinner.start();
+
     ros::Rate loop_rate(10);
     ros::Time last_time = ros::Time::now();
 

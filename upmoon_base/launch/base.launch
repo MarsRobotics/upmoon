@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find upmoon_control)/launch/control.launch" />
+
+    <node pkg="upmoon_base" type="upmoon_node" name="upmoon_node" />
+</launch>

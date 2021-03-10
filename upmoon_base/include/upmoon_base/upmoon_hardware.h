@@ -4,6 +4,7 @@
 #include "hardware_interface/joint_state_interface.h"
 #include "hardware_interface/joint_command_interface.h"
 #include "hardware_interface/robot_hw.h"
+#include "std_msgs/Float64.h"
 #include "ros/ros.h"
 
 namespace upmoon_base {
@@ -22,6 +23,7 @@ private:
         double velocity;
         double effort;
         double command;
+        ros::Publisher topic;
 
         Joint() : position(0), velocity(0), effort(0), command(0)
         {

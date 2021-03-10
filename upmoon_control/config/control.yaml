@@ -2,19 +2,29 @@ state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 
-ankles_left_controller:
-  type: position_controllers/JointGroupPositionController
-  joints:
-    - ankle_lf_joint
-    - ankle_lm_joint
-    - ankle_lb_joint
+ankle_lf_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_lf_joint
 
-ankles_right_controller:
-  type: position_controllers/JointGroupPositionController
-  joints:
-    - ankle_rf_joint
-    - ankle_rm_joint
-    - ankle_rb_joint
+ankle_lm_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_lm_joint
+
+ankle_lb_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_lb_joint
+
+ankle_rf_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_rf_joint
+
+ankle_rm_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_rm_joint
+
+ankle_rb_controller:
+  type: position_controllers/JointPositionController
+  joint: ankle_rb_joint
 
 diff_drive_controller:
   type: "diff_drive_controller/DiffDriveController"

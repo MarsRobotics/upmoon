@@ -18,6 +18,9 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
 
     // drive wheels use a velocity controller
     for (int i = 0; i < 6; i++) {
+        std::string topic_name = "/motor/" + drive_names[i];
+        drive_joints_[i].topic = nh.advertise<std_msgs::Float64>(topic_name, 10);
+
         hardware_interface::JointStateHandle joint_state_handle(drive_names[i],
                                                                 &drive_joints_[i].position,
                                                                 &drive_joints_[i].velocity,
@@ -30,6 +33,9 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
 
     // ankle motors use a position controller
     for (int i = 0; i < 6; i++) {
+        std::string topic_name = "/motor/" + ankle_names[i];
+        ankle_joints_[i].topic = nh.advertise<std_msgs::Float64>(topic_name, 10);
+
         hardware_interface::JointStateHandle joint_state_handle(ankle_names[i],
                                                                 &ankle_joints_[i].position,
                                                                 &ankle_joints_[i].velocity,
@@ -48,7 +54,18 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
 void UPMoonHardware::write()
 {
     //TODO: setup position limits for ankles: https://github.com/ros-controls/ros_control/wiki/joint_limits_interface
-    
+
+    for (int i = 0; i < 6; i++) {
+        std_msgs::Float64 msg;
+        msg.data = drive_joints_[i].command;
+        drive_joints_[i].topic.publish(msg);
+    }
+
+    for (int i = 0; i < 6; i++) {
+        std_msgs::Float64 msg;
+        msg.data = ankle_joints_[i].command;
+        ankle_joints_[i].topic.publish(msg);
+    }
 
 }
 
