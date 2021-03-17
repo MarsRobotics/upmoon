@@ -2,7 +2,8 @@
 
 import rospy
 from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Joy, Float64
+from sensor_msgs.msg import Joy
+from std_msgs.msg import Float64
 
 class TeleopJoy:
 
@@ -10,6 +11,8 @@ class TeleopJoy:
     SPEED_ANGULAR = 1   # Max velocity for an angular twist vector
     ANKLE_PACK_IN = 0
     ANKLE_PACK_OUT = 3.14159265
+    DIGGING_SPEED_MAX = 100 # Max percentage of power for digging
+    DIGGING_SPEED_MIN = 0
 
     def __init__(self):
         self.pub_twist              = rospy.Publisher('/diff_drive_controller/cmd_vel', Twist, queue_size=10)
@@ -23,6 +26,8 @@ class TeleopJoy:
         self.pub_ankle_rf           = rospy.Publisher('/ankle_rf_controller/command', Float64, queue_size=10)
         self.pub_ankle_rm           = rospy.Publisher('/ankle_rm_controller/command', Float64, queue_size=10)
         self.pub_ankle_rb           = rospy.Publisher('/ankle_rb_controller/command', Float64, queue_size=10)
+
+        self.digging_speed = self.DIGGING_SPEED_MIN
 
         rospy.Subscriber('joy', Joy, self.joy_callback)
     
@@ -41,6 +46,21 @@ class TeleopJoy:
         self.pub_ankle_rb.publish(payload)
 
 
+    # Stops the drive and digger
+    def soft_stop(self):
+        twist = Twist()
+        twist.linear.x = 0
+        twist.linear.y = 0
+        twist.linear.z = 0
+        twist.angular.x = 0
+        twist.angular.y = 0
+        twist.angular.z = 0
+        self.pub_twist.publish(twist)
+        dig = Float64()
+        dig.data = 0
+        self.pub_excavate_spin.publish(dig)
+
+
     """
     Example Twist Message:
         twist.linear.x = 0 # Forward/back
@@ -56,6 +76,11 @@ class TeleopJoy:
         # log joystick data for learning
         rospy.loginfo("axes: {}".format(str(joy_msg.axes)))
         rospy.loginfo("buttons: {}".format(str(joy_msg.buttons)))
+
+        # X causes soft stop
+        if (joy_msg.buttons[0]):
+            self.soft_stop()
+            return
         
         # Right Trigger: Accelerate
         # joy_msg.axes[5] (default = 1.0, fully pressed = -1.0)
@@ -87,6 +112,7 @@ class TeleopJoy:
         # twist.linear.x = total_speed * rs_x
         # twist.linear.y = total_speed * rs_y
         
+        # Contorl ankles
         if (joy_msg.buttons[15] and joy_msg.buttons[16]):
             # ignore as both are pressed
             pass
@@ -97,8 +123,26 @@ class TeleopJoy:
             # right d pad was pressed => pack in
             self.ankle_set(self.ANKLE_PACK_IN)
 
+        # Control digger speed
+        if (joy_msg.buttons[0]):
+            # X is pressed => stop digger
+            self.pub_excavate_spin.publish(Float64(self.DIGGING_SPEED_MIN))
+        elif (joy_msg.buttons[4] and joy_msg.buttons[5]):
+            # ignore as both bumpers are pressed
+            pass
+        elif (joy_msg.buttons[4]):
+            # left bumper was pressed => reverse digger
+            self.pub_excavate_spin.publish(Float64(0.2*-self.DIGGING_SPEED_MAX))
+        elif (joy_msg.buttons[5]):
+            # right bumper was pressed => forward
+            self.pub_excavate_spin.publish(Float64(self.DIGGING_SPEED_MAX))
+
         # Publish twist message
         self.pub_twist.publish(twist)
+
+        # TODO: Right analog stick to raise/lower digger
+        # TODO: Use <triangle, square, or circle> for opening/closing deposition
+        # TODO:     toggle or (press to open and press to close)
 
     def normalize_trigger(self, trig):
         trig = float(trig)
