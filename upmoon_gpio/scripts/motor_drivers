@@ -20,30 +20,30 @@ class MotorDriver:
 
 
     def create_drivetrain(self):
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/lf", motor_id=1))
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/lm", motor_id=2))
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/lb", motor_id=3))
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/rf", motor_id=4))
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/rm", motor_id=5))
-        self.motors.append(TrinamicsMotor(topic="/motor/drive/rb", motor_id=6))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", motor_id=1))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", motor_id=2))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", motor_id=3))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", motor_id=4))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", motor_id=5))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", motor_id=6))
 
 
     def create_articulators(self):
-        self.motors.append(Stepper(topic="/motor/ankle/lf", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle/lm", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle/lb", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle/rf", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle/rm", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle/rb", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", disable_pin=0, dir_pin=1, step_pin=2))
 
 
     def create_excavator(self):
-        self.motors.append(DCBrushed(topic='/motor/excavate/spin', address=128, motor_num=1))
-        self.motors.append(PWM(topic='/motor/excavate/actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
+        self.motors.append(DCBrushed(topic='/motor/excavate_spin', address=128, motor_num=1))
+        self.motors.append(PWM(topic='/motor/excavate_actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
 
 
     def create_depositor(self):
-        self.motors.append(PWM(topic='/motor/depositor/actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
+        self.motors.append(PWM(topic='/motor/depositor_actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
 
 
     def run(self):
