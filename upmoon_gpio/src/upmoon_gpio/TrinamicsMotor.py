@@ -7,16 +7,16 @@ from PyTrinamic.modules.TMCM1670.TMCM_1670 import TMCM_1670_motor_interface
 
 class TrinamicsMotor(MotorListener):
 
-    def __init__(self, topic, motor_id=3, diameter=0.5, gear_ratio=60):
+    def __init__(self, topic, motor_id=1, diameter=0.5, gear_ratio=60):
         super().__init__(topic)
         self.m_per_sec_convert = 3.14159 * diameter / (gear_ratio * 60)
-        self.rpm_convert = gear_ratio * 60 / (3.14159 * diameter)
+        self.rpm_convert = gear_ratio * 60 / (3.14159 * 2)
         msg = "--interface socketcan_tmcl --host-id 2 --module-id {module}".format(module = motor_id)
         connectionManager = ConnectionManager(msg.split())
         self.myInterface = connectionManager.connect()
 
         self.motorID = motor_id
-        self.module = TMCM_1670(self.myInterface)
+        self.module = TMCM_1670(self.myInterface, motor_id)
 
         # motor configuration
         #self.AP.MaxTorque
@@ -86,8 +86,8 @@ class TrinamicsMotor(MotorListener):
     def setVelocity(self, rpm):
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetVelocity, int(rpm))
 
-    """Converts rpms to meters per second"""
-    def setVelocityMS(self, vel):
+    """Converts radians per second to rpm"""
+    def setVelocityRads(self, vel):
         rpm = vel * self.rpm_convert
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetVelocity, int(rpm))
 
@@ -97,7 +97,7 @@ class TrinamicsMotor(MotorListener):
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetTorque, 0)
 
     def update(self, data):
-        self.setVelocityMS(data)
+        self.setVelocityRads(data)
 
     def loop(self):
         pass
