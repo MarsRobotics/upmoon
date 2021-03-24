@@ -38,8 +38,8 @@ class MotorDriver:
 
 
     def create_excavator(self):
-        self.motors.append(DCBrushed(topic='/motor/excavate_spin', address=128, motor_num=1))
-        self.motors.append(PWM(topic='/motor/excavate_actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
+        self.motors.append(DCBrushed(topic='/motor/dig_spin', address=128, motor_num=1))
+        self.motors.append(PWM(topic='/motor/dig_angle_joint', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
 
 
     def create_depositor(self):
