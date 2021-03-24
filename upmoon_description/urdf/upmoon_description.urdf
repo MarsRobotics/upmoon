@@ -895,6 +895,29 @@
       xyz="0 0 0" />
   </joint>
 
+  <link
+    name="dig_angle_link">
+  </link>
+  <joint
+    name="dig_angle_joint"
+    type="continuous">
+    <parent
+      link="base_link" />
+    <child
+      link="dig_angle_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <transmission name="dig_angle_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="dig_angle_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="dig_angle_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/</robotNamespace>

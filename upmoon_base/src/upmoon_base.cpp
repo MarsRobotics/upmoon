@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include <upmoon_base/upmoon_hardware.h>
+#include "upmoon_base/upmoon_hardware.h"
 #include <controller_manager/controller_manager.h>
 
 int main(int argc, char **argv)
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     {
         ros::Time time = ros::Time::now();
 
-        upmoon_hardware.read();
+        upmoon_hardware.enforceLimits(time);
         cm.update(ros::Time::now(), time - last_time);
         upmoon_hardware.write();
 

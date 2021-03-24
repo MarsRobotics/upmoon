@@ -15,7 +15,8 @@
               ankle_lb_controller
               ankle_rf_controller
               ankle_rm_controller
-              ankle_rb_controller"/>
+              ankle_rb_controller
+              dig_angle_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher"

@@ -16,6 +16,10 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
     std::string ankle_names[6] = {"ankle_lf_joint", "ankle_lm_joint", "ankle_lb_joint",
                                   "ankle_rf_joint", "ankle_rm_joint", "ankle_rb_joint"};
 
+    std::string dig_angle_name = "dig_angle_joint";
+
+    prev_time = ros::Time::now();
+
     // drive wheels use a velocity controller
     for (int i = 0; i < 6; i++) {
         std::string topic_name = "/motor/" + drive_names[i];
@@ -46,6 +50,21 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
         position_joint_interface_.registerHandle(joint_handle);
     }
 
+    // digging angle uses a velocity controller
+    {
+        std::string topic_name = "/motor/" + dig_angle_name;
+        dig_angle_joint_.topic = nh.advertise<std_msgs::Float64>(topic_name, 10);
+
+        hardware_interface::JointStateHandle joint_state_handle(dig_angle_name,
+                                                                &dig_angle_joint_.position,
+                                                                &dig_angle_joint_.velocity,
+                                                                &dig_angle_joint_.effort);
+        joint_state_interface_.registerHandle(joint_state_handle);
+
+        hardware_interface::JointHandle joint_handle(joint_state_handle, &dig_angle_joint_.command);
+        velocity_joint_interface_.registerHandle(joint_handle);
+    }
+
     registerInterface(&joint_state_interface_);
     registerInterface(&velocity_joint_interface_);
     registerInterface(&position_joint_interface_);
@@ -53,8 +72,6 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
 
 void UPMoonHardware::write()
 {
-    //TODO: setup position limits for ankles: https://github.com/ros-controls/ros_control/wiki/joint_limits_interface
-
     for (int i = 0; i < 6; i++) {
         std_msgs::Float64 msg;
         msg.data = drive_joints_[i].command;
@@ -67,11 +84,32 @@ void UPMoonHardware::write()
         ankle_joints_[i].topic.publish(msg);
     }
 
+    {
+        std_msgs::Float64 msg;
+        msg.data = dig_angle_joint_.position;
+        dig_angle_joint_.topic.publish(msg);
+    }
+
 }
 
-void UPMoonHardware::read()
+void UPMoonHardware::enforceLimits(const ros::Time &time)
 {
+    ros::Duration dt = time - prev_time;
+    // we don't have encoders so say the current velocity command is the real velocity
+    dig_angle_joint_.velocity = dig_angle_joint_.command;
 
+    double calc_dig_angle_pos = dig_angle_joint_.position + dig_angle_joint_.velocity * dt.toSec();
+
+    // don't let the position go past the limits
+    if (calc_dig_angle_pos >= DIG_ANGLE_MAX) {
+        dig_angle_joint_.position = DIG_ANGLE_MAX;
+    } else if (calc_dig_angle_pos <= DIG_ANGLE_MIN) {
+        dig_angle_joint_.position = DIG_ANGLE_MIN;
+    } else {
+        dig_angle_joint_.position = calc_dig_angle_pos;
+    }    
+
+    prev_time = time;
 }
 
 
