@@ -5,55 +5,52 @@ import rospy
 
 class MotorDriver:
     
-    def __init__(self):
+    def __init__(self, rate: rospy.Rate):
+        self.rate = rate
         self.motors = []
 
         # self.create_drivetrain()
-        # self.create_articulators()
+        self.create_articulators()
         # self.create_excavator()
         # self.create_excavator()
-        self.motors.append(Stepper(topic="/motor/ankle/lf", disable_pin=0, dir_pin=27, step_pin=17, delay=0.50, revs_per_turn=1))
+        self.create_depositor()
 
         rospy.loginfo("Inititalized motor driver")
 
-        self.run()
+        for motor in self.motors:
+            motor.start()
 
 
     def create_drivetrain(self):
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", motor_id=1))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", motor_id=2))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", motor_id=3))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", motor_id=4))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", motor_id=5))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", motor_id=6))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", sleep_rate=self.rate, motor_id=1))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", sleep_rate=self.rate, motor_id=2))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", sleep_rate=self.rate, motor_id=3))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", sleep_rate=self.rate, motor_id=4))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", sleep_rate=self.rate, motor_id=5))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", sleep_rate=self.rate, motor_id=6))
 
 
     def create_articulators(self):
-        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=0, dir_pin=1, step_pin=2))
-        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", disable_pin=0, dir_pin=1, step_pin=2))
+        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=21, dir_pin=4, step_pin=17, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=21, dir_pin=19, step_pin=26, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
 
 
     def create_excavator(self):
-        self.motors.append(DCBrushed(topic='/motor/dig_spin', address=128, motor_num=1))
-        self.motors.append(PWM(topic='/motor/dig_angle_joint', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
+        self.motors.append(DCBrushed(topic='/motor/dig_spin', address=128, motor_num=1, sleep_rate=self.rate))
+        self.motors.append(PWM(topic='/motor/dig_angle_joint', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0, sleep_rate=self.rate))
 
 
     def create_depositor(self):
-        self.motors.append(PWM(topic='/motor/depositor_actuator', pin=0, freq=50, min_dc=0, max_dc=100, init_range=0))
-
-
-    def run(self):
-        while not rospy.is_shutdown():
-            for motor in self.motors:
-                motor.run()
+        self.motors.append(PWM(topic='/motor/depositor_actuator', pin=20, freq=50, min_dc=0, max_dc=100, init_range=50, sleep_rate=self.rate))
 
 
 if __name__ == '__main__':
     rospy.init_node('motor_driver')
 
-    md = MotorDriver()
+    md = MotorDriver(rospy.Rate(300))
 
+    rospy.spin()

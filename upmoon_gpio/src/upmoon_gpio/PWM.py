@@ -1,12 +1,13 @@
 from .MotorListener import MotorListener
 import RPi.GPIO as GPIO
+import rospy
 
 class PWM(MotorListener):
 
     MIN_RANGE = 0
     MAX_RANGE = 100
 
-    def __init__(self, topic, pin, freq, min_dc, max_dc, init_range, invert=False):
+    def __init__(self, topic, pin, freq, min_dc, max_dc, init_range, sleep_rate: rospy.Rate, invert=False):
         """
         A PWM class that sets RPi pin to specified duty cycle and freqency
             
@@ -40,6 +41,7 @@ class PWM(MotorListener):
 
         self.pwm = GPIO.PWM(pin, freq)
         self.pwm.start(self.convertRangeToDutyCycle(init_range))
+        self.sleep_rate = sleep_rate
 
     def convertRangeToDutyCycle(self, percent):
         if (percent < self.MIN_RANGE or percent > self.MAX_RANGE):
@@ -59,4 +61,4 @@ class PWM(MotorListener):
         self.setPosition(data)
 
     def loop(self):
-        pass
+        self.sleep_rate.sleep()

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 import rospy
 from std_msgs.msg import Float64
+from threading import Thread
 
-class MotorListener(ABC):
+class MotorListener(ABC, Thread):
 
     """
     Parmmeters:
@@ -11,6 +12,7 @@ class MotorListener(ABC):
         data: Last message from the topic stored
     """
     def __init__(self, topic: str):
+        super().__init__()
         rospy.Subscriber(topic, Float64, self.topic_callback)
         self.updated = True
         self.data = None
@@ -39,8 +41,9 @@ class MotorListener(ABC):
 
     
     def run(self):
-        if not self.updated:
-            self.updated = True
-            self.update(self.data)
-        self.loop()
+        while not rospy.is_shutdown():
+            if not self.updated:
+                self.updated = True
+                self.update(self.data)
+            self.loop()
 

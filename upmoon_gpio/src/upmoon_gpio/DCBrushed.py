@@ -1,9 +1,10 @@
 from .MotorListener import MotorListener
 from pysabertooth import Sabertooth
+import rospy
 
 class DCBrushed(MotorListener):
 
-    def __init__(self, topic, address, motor_num):
+    def __init__(self, topic, address, motor_num, sleep_rate: rospy.Rate):
         """
         A DC brushed motor class for sabertooth motor controllers in packetized serial
         
@@ -20,7 +21,8 @@ class DCBrushed(MotorListener):
         self.address = address
         self.motor_num = motor_num
         self.motor = Sabertooth('/dev/serial0', baudrate=9600, address=self.address)
-        
+        self.sleep_rate = sleep_rate
+
     def drive(self, speed):
         """
         Sets the motor to a given power
@@ -33,4 +35,4 @@ class DCBrushed(MotorListener):
         self.drive(data)
 
     def loop(self):
-        pass
+        self.sleep_rate.sleep()

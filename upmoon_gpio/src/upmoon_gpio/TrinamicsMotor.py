@@ -4,10 +4,11 @@ from PyTrinamic.connections.ConnectionManager import ConnectionManager
 from PyTrinamic.modules.TMCM1670.TMCM_1670 import TMCM_1670
 from PyTrinamic.modules.TMCM1670.TMCM_1670 import _AP_MOTOR_0
 from PyTrinamic.modules.TMCM1670.TMCM_1670 import TMCM_1670_motor_interface
+import rospy
 
 class TrinamicsMotor(MotorListener):
 
-    def __init__(self, topic, motor_id=1, diameter=0.5, gear_ratio=60):
+    def __init__(self, topic, sleep_rate: rospy.Rate, motor_id=1, diameter=0.5, gear_ratio=60):
         super().__init__(topic)
         self.m_per_sec_convert = 3.14159 * diameter / (gear_ratio * 60)
         self.rpm_convert = gear_ratio * 60 / (3.14159 * 2)
@@ -55,6 +56,8 @@ class TrinamicsMotor(MotorListener):
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.ActualPosition, 0)#Sets Position parameter (motor thinks it is at position 0 on startup)
 #        self.module.setActualPosition(0)
 
+        self.sleep_rate = sleep_rate
+
     def __del__(self):
         try:
             self.setTorque()#Sets the target torque(current) to 0
@@ -100,4 +103,4 @@ class TrinamicsMotor(MotorListener):
         self.setVelocityRads(data)
 
     def loop(self):
-        pass
+        self.sleep_rate.sleep()

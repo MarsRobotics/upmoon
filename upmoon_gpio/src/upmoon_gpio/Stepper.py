@@ -2,10 +2,17 @@ from .MotorListener import MotorListener
 import RPi.GPIO as GPIO
 from rospy import sleep
 import rospy
+import math
+from threading import Lock
 
 class Stepper(MotorListener):
 
-    def __init__(self, topic, disable_pin, dir_pin, step_pin, steps_per_rev=200, revs_per_turn=60, delay=0.15):
+    # Keeps track of total motors spawned and disabed
+    motor_count_lock = Lock()
+    total_motors = 0
+    disabled_motors = 0
+
+    def __init__(self, topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
         """
         A stepper motor class originally made for the Geckodrive G213V
             
@@ -48,17 +55,42 @@ class Stepper(MotorListener):
             print('Step pin failure')
 
         self.position = 0
-        self.disable()#default the stepper to being powered off
+        self.sleep_rate = sleep_rate
+
+        # Add this stepper to the count
+        with Stepper.motor_count_lock:
+            Stepper.total_motors += 1
+        
+        self.disable()
+        
 
     def enable(self):
-        GPIO.output(self.dis_pin, 0)#holds position of the stepper
+        with Stepper.motor_count_lock:
+            Stepper.disabled_motors -= 1
+
+            if Stepper.disabled_motors == (Stepper.total_motors - 1):
+                rospy.logdebug("ENABLE")
+                GPIO.output(self.dis_pin, 0)#holds position of the stepper
+                sleep(1) # Need to wait until the Gecko is enabled
 
     def disable(self):
-        GPIO.output(self.dis_pin, 1)#disable the stepper. Let's it move freely, but does not take power
+        with Stepper.motor_count_lock:
+            Stepper.disabled_motors += 1
 
-    def setAngle(self, angle):
+            if Stepper.disabled_motors == Stepper.total_motors:
+                GPIO.output(self.dis_pin, 1)#disable the stepper. Let's it move freely, but does not take power
+                rospy.logdebug("DISABLE")
+
+    def setAngle(self, rad):
+        # Convert radians to degrees
+        angle = rad * 180 / math.pi
+
         self.curr_angle = self.position * 360 / self.steps_per_turn
         self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
+
+        msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
+        rospy.logdebug(msg)
+
         self.direction = 0 if self.step_count > 0 else 1
         self.step_count = abs(self.step_count)
         GPIO.output(self.dir_pin, self.direction)
@@ -73,6 +105,7 @@ class Stepper(MotorListener):
         GPIO.output(self.step_pin, 1)
         sleep(self.delay/1000)
         GPIO.output(self.step_pin, 0)
+        sleep(self.delay/1000)
         self.position += 1 if (self.direction == 0) else -1
         self.step_count -= 1
 
@@ -87,4 +120,7 @@ class Stepper(MotorListener):
         self.setAngle(data)
 
     def loop(self):
-        self.step()
+        if self.running:
+            self.step()
+        else:
+            self.sleep_rate.sleep()
