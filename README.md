@@ -1,6 +1,8 @@
 # upmoon
 ROS packages for a Lunabotics mining robot. Each ROS package is defined below. Further details on the robot's hardware and configuration are included in the repo's [wiki](https://github.com/MarsRobotics/upmoon/wiki).
 
+For people unfamiliar with ROS, their [Getting Started](http://wiki.ros.org/ROS/Introduction) wiki page is an excellent starting point. Be sure to navigate to each page in the “Getting Started” series by clicking on the next page link on the bottom of every page. For hands on learning, they offer helpful [walkthrough tutorials](http://wiki.ros.org/ROS/Tutorials) to learn how to utilize ROS.
+
 ## upmoon_base
 Maintains a [ROS Control](http://wiki.ros.org/ros_control) hardware interface for connecting ROS controller to physical hardware. This package is written in C++. This also includes the base launch script for starting physical robot. The script starts the ROS controllers, the hardware interface, and the GPIO motor communications. Because the GPIO package is defined in Python and there's no easy way to communicate to Python objects in C++ without learning special wrappers, the hardware interface passes all motor commands to the GPIO motor controller on a ROS topic prefixed with "/motor".
 
