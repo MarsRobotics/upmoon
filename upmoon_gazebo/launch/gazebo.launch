@@ -24,4 +24,7 @@
               -param robot_description
               -model upmoon" />
 
+  <!-- Start teleop controls -->
+  <include file="$(find upmoon_teleop)/launch/teleop_joy.launch" />
+
 </launch>
