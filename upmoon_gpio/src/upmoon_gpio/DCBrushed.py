@@ -20,7 +20,7 @@ class DCBrushed(MotorListener):
         super().__init__(topic)
         self.address = address
         self.motor_num = motor_num
-        self.motor = Sabertooth('/dev/serial0', baudrate=9600, address=self.address)
+        self.motor = Sabertooth('/dev/ttyS0', baudrate=9600, address=self.address)
         self.sleep_rate = sleep_rate
 
     def drive(self, speed):
