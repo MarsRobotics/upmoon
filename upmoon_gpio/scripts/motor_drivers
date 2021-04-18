@@ -9,10 +9,9 @@ class MotorDriver:
         self.rate = rate
         self.motors = []
 
-        # self.create_drivetrain()
+        self.create_drivetrain()
         self.create_articulators()
-        # self.create_excavator()
-        # self.create_excavator()
+        self.create_excavator()
         self.create_depositor()
 
         rospy.loginfo("Inititalized motor driver")
@@ -23,11 +22,11 @@ class MotorDriver:
 
     def create_drivetrain(self):
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", sleep_rate=self.rate, motor_id=1))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", sleep_rate=self.rate, motor_id=2))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", sleep_rate=self.rate, motor_id=3))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", sleep_rate=self.rate, motor_id=4))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", sleep_rate=self.rate, motor_id=5))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", sleep_rate=self.rate, motor_id=6))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", sleep_rate=self.rate, motor_id=3))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", sleep_rate=self.rate, motor_id=4))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", sleep_rate=self.rate, motor_id=5))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", sleep_rate=self.rate, motor_id=6))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", sleep_rate=self.rate, motor_id=7))
 
 
     def create_articulators(self):
@@ -45,7 +44,7 @@ class MotorDriver:
 
 
     def create_depositor(self):
-        self.motors.append(PWM(topic='/motor/depositor_actuator', pin=20, freq=50, min_dc=0, max_dc=100, init_range=50, sleep_rate=self.rate))
+        self.motors.append(PWM(topic='/motor/depositor_actuator', pin=20, freq=50, min_dc=0, max_dc=100, init_range=0, sleep_rate=self.rate))
 
 
 if __name__ == '__main__':
