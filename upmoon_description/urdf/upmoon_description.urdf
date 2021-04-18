@@ -897,6 +897,38 @@
 
   <link
     name="dig_angle_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="0."
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0.5"
+        rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.01" radius="0.01"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.286274509803922 0.662745098039216 0.329411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+    </collision>
   </link>
   <joint
     name="dig_angle_joint"
