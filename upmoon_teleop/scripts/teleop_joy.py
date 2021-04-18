@@ -74,10 +74,6 @@ class TeleopJoy:
         twist.angular.z = 0 # Turn left/right (control this with left stick)
     """
     def joy_callback(self, joy_msg):
-        # log joystick data for learning
-        rospy.loginfo("axes: {}".format(str(joy_msg.axes)))
-        rospy.loginfo("buttons: {}".format(str(joy_msg.buttons)))
-
         # X causes soft stop
         if (joy_msg.buttons[0]):
             self.soft_stop()
@@ -95,7 +91,6 @@ class TeleopJoy:
         l_trig = -self.normalize_trigger(joy_msg.axes[2])
 
         # Scale input to actual velocity values
-        rospy.loginfo("l_trig: {} r_trig: {}".format(l_trig, r_trig))
         twist.linear.x = r_trig*self.SPEED_LINEAR + l_trig*self.SPEED_LINEAR
         twist.linear.y = twist.linear.z = 0
 
