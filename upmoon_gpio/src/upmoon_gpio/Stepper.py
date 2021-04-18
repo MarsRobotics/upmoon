@@ -124,3 +124,6 @@ class Stepper(MotorListener):
             self.step()
         else:
             self.sleep_rate.sleep()
+
+    def on_exit(self):
+        pass

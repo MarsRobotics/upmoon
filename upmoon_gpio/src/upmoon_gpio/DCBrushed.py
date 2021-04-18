@@ -36,3 +36,6 @@ class DCBrushed(MotorListener):
 
     def loop(self):
         self.sleep_rate.sleep()
+
+    def on_exit(self):
+        pass
