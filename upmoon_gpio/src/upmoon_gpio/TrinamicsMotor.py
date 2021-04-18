@@ -21,7 +21,15 @@ class TrinamicsMotor(MotorListener):
 
         # motor configuration
         #self.AP.MaxTorque
-        self.module.motor(0).setAxisParameter(_AP_MOTOR_0.MaxTorque, 3000)#Sets max torque (current draw in mA)
+        try:
+            self.module.motor(0).setAxisParameter(_AP_MOTOR_0.MaxTorque, 3000)#Sets max torque (current draw in mA)
+        except ConnectionError as err:
+            rospy.logerr("TrinamicsMotor" + " " + str(motor_id) + ": " + str(err))
+            connectionManager.disconnect()
+            self.stop = True
+            return
+
+        rospy.logerr("TrinamicsMotor" + " " + str(motor_id) + ": Connected")
         #self.module.showMotorConfiguration()
 
         # encoder configuration
@@ -104,3 +112,9 @@ class TrinamicsMotor(MotorListener):
 
     def loop(self):
         self.sleep_rate.sleep()
+
+    """
+    Close the interface; otherwise, the thread will hang.
+    """
+    def on_exit(self):
+        self.myInterface.close()
