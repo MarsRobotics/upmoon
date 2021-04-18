@@ -16,6 +16,7 @@ class MotorListener(ABC, Thread):
         rospy.Subscriber(topic, Float64, self.topic_callback)
         self.updated = True
         self.data = None
+        self.stop = False
 
 
     def topic_callback(self, data):
@@ -39,11 +40,17 @@ class MotorListener(ABC, Thread):
     def loop(self):
         pass
 
+    """
+    Gets called when the thread is finished
+    """
+    @abstractmethod
+    def on_exit(self):
+        pass
     
     def run(self):
-        while not rospy.is_shutdown():
+        while not rospy.is_shutdown() and not self.stop:
             if not self.updated:
                 self.updated = True
                 self.update(self.data)
             self.loop()
-
+        self.on_exit()
