@@ -27,8 +27,11 @@ class Stepper(MotorListener):
             steps_per_rev: the number of steps the stepper the stepper must take to complete one revolution of its rotor
             revs_per_turn: How many revolutions of the motor rotor for one full rotation of the geabox rotor
             delay: the smallest delay achievable by the motor. Will not allow a delay smaller than this
+            [TODO] reverse_dir: If true, reverses the default direction of the motor.
         """
         super().__init__(topic)
+        GPIO.setwarnings(False)  # Disable warnings from multiple motors using same enable pin.
+
         self.steps_per_turn = steps_per_rev*revs_per_turn #How many steps the motor must turn to turn the output device one full revolution
         self.curr_angle = 0
         self.step_count = 0

@@ -8,10 +8,14 @@ import rospy
 
 class TrinamicsMotor(MotorListener):
 
-    def __init__(self, topic, sleep_rate: rospy.Rate, motor_id=1, diameter=0.5, gear_ratio=60):
+    def __init__(self, topic, sleep_rate: rospy.Rate, motor_id=1, diameter=0.5, gear_ratio=60, reverse_dir=False):
         super().__init__(topic)
         self.m_per_sec_convert = 3.14159 * diameter / (gear_ratio * 60)
         self.rpm_convert = gear_ratio * 60 / (3.14159 * 2)
+
+        if reverse_dir:
+            self.rpm_convert = self.rpm_convert * -1
+
         msg = "--interface socketcan_tmcl --host-id 2 --module-id {module}".format(module = motor_id)
         connectionManager = ConnectionManager(msg.split())
         self.myInterface = connectionManager.connect()
@@ -20,7 +24,6 @@ class TrinamicsMotor(MotorListener):
         self.module = TMCM_1670(self.myInterface, motor_id)
 
         # motor configuration
-        #self.AP.MaxTorque
         try:
             self.module.motor(0).setAxisParameter(_AP_MOTOR_0.MaxTorque, 3000)#Sets max torque (current draw in mA)
         except ConnectionError as err:
@@ -29,8 +32,7 @@ class TrinamicsMotor(MotorListener):
             self.stop = True
             return
 
-        rospy.logerr("TrinamicsMotor" + " " + str(motor_id) + ": Connected")
-        #self.module.showMotorConfiguration()
+        rospy.loginfo("TrinamicsMotor" + " " + str(motor_id) + ": Connected")
 
         # encoder configuration
         #self.module.showEncoderConfiguration()
@@ -42,8 +44,6 @@ class TrinamicsMotor(MotorListener):
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetReachedVelocity, 100)#Sets Target Reached Velocity (in rpms)
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetReachedDistance, 1000)#Sets Target Reached Position (in encoder counts)
 
-        #self.module.showMotionConfiguration()
-
         # PI configuration
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TorqueP, 2000)#Sets Torque P parameter
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TorqueI, 2000)#Sets Torque I parameter
@@ -51,18 +51,8 @@ class TrinamicsMotor(MotorListener):
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.VelocityI, 600)#Sets Velocity I parameter
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.PositionP, 300)#Sets Position P parameter
 
-#        self.module.setTorquePParameter(2000) #4000 #2:000
-#        self.module.setTorqueIParameter(2000) #2000
-#        self.module.setVelocityPParameter(800) #1000
-#        self.module.setVelocityIParameter(600) #500
-        #self.module.showPIConfiguration()
-
-        # use out_0 output for enable input (directly shortened)
-#        self.module.setDigitalOutput(0)
-
         # sync actual position with encoder N-Channel 
         self.module.motor(0).setAxisParameter(_AP_MOTOR_0.ActualPosition, 0)#Sets Position parameter (motor thinks it is at position 0 on startup)
-#        self.module.setActualPosition(0)
 
         self.sleep_rate = sleep_rate
 
@@ -91,11 +81,11 @@ class TrinamicsMotor(MotorListener):
     def getVoltage(self):
         return float(self.module.motor(0).axisParameter(_AP_MOTOR_0.SupplyVoltage))/10
 
-    def setPosition(self, pos):
-        self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetPosition, int(pos))
+    #def setPosition(self, pos):
+    #    self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetPosition, int(pos))
 
-    def setVelocity(self, rpm):
-        self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetVelocity, int(rpm))
+    #def setVelocity(self, rpm):
+    #    self.module.motor(0).setAxisParameter(_AP_MOTOR_0.TargetVelocity, int(rpm))
 
     """Converts radians per second to rpm"""
     def setVelocityRads(self, vel):
