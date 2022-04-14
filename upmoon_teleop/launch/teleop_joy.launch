@@ -1,6 +1,6 @@
 <launch>
 
-  <rosparam param="joy_node/dev">/dev/input/js2</rosparam>
+  <rosparam param="joy_node/dev">/dev/input/js0</rosparam>
   
   <!-- The diff_drive_controller will timeout and stops the robot if no command
   are sent after 5 seconds. Thus, we need to send commands at a period slightly
