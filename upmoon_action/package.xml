@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>upmoon_teleop</name>
+  <name>upmoon_action</name>
   <version>0.0.0</version>
-  <description>The upmoon_teleop package</description>
+  <description>The upmoon_action package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/upmoon_teleop</url> -->
+  <!-- <url type="website">http://wiki.ros.org/upmoon_action</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -49,17 +49,16 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>joy</build_depend>
+  <build_depend>actionlib</build_depend>
   <build_depend>rospy</build_depend>
-  <build_export_depend>geometry_msgs</build_export_depend>
-  <build_export_depend>joy</build_export_depend>
+  <build_depend>upmoon_action_msg</build_depend>
+  <build_export_depend>actionlib</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>upmoon_action_msg</build_export_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>joy</exec_depend>
+  <exec_depend>actionlib</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>upmoon_action_msg</exec_depend>
+  <!-- <exec_depend>message_runtime</exec_depend> -->
 
 
   <!-- The export tag contains other, unspecified, tags -->

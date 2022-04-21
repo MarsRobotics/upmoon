@@ -96,6 +96,7 @@
       link="ankle_lf_link" />
     <axis
       xyz="0 0 1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_lf_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -220,6 +221,7 @@
       link="ankle_lm_link" />
     <axis
       xyz="0 0 1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_lm_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -344,6 +346,7 @@
       link="ankle_lb_link" />
     <axis
       xyz="0 0 -1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_lb_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -468,6 +471,7 @@
       link="ankle_rf_link" />
     <axis
       xyz="0 0 -1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_rf_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -592,6 +596,7 @@
       link="ankle_rm_link" />
     <axis
       xyz="0 0 -1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_rm_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -716,6 +721,7 @@
       link="ankle_rb_link" />
     <axis
       xyz="0 0 1" />
+    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
   </joint>
   <transmission name="ankle_rb_trans">
     <type>transmission_interface/SimpleTransmission</type>

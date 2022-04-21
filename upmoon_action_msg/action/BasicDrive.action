@@ -1,0 +1,10 @@
+#goal definition
+float64 distance
+---
+#result definition
+int32 elapsed_time
+float64 error
+---
+#feedback
+int32 remaining_time
+float64 error

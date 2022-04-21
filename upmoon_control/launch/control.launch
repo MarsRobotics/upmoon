@@ -18,6 +18,15 @@
               ankle_rb_controller
               dig_angle_controller"/>
 
+  <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner"
+        args="--stopped
+             wheel_lf_controller
+             wheel_lm_controller
+             wheel_lb_controller
+             wheel_rf_controller
+             wheel_rm_controller
+             wheel_rb_controller"/> 
+
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher"
         type="robot_state_publisher" />
