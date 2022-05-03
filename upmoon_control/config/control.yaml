@@ -50,26 +50,21 @@ wheel_lf_controller:
   type: velocity_controllers/JointVelocityController
   joint: wheel_lf_joint
 
-
 wheel_lm_controller:
   type: velocity_controllers/JointVelocityController
   joint: wheel_lm_joint
-
 
 wheel_lb_controller:
   type: velocity_controllers/JointVelocityController
   joint: wheel_lb_joint
 
-
 wheel_rf_controller:
   type: velocity_controllers/JointVelocityController
   joint: wheel_rf_joint
 
-
 wheel_rm_controller:
   type: velocity_controllers/JointVelocityController
   joint: wheel_rm_joint
-
 
 wheel_rb_controller:
   type: velocity_controllers/JointVelocityController

@@ -19,6 +19,8 @@
 
   <include file="$(find upmoon_control)/launch/control.launch" />
 
+  <node pkg="upmoon_action" type="articulate.py" name="action_articulate" />
+
   <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
         args="-urdf
               -param robot_description

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from upmoon_gpio import MotorListener, TrinamicsMotor, Stepper, PWM, DCBrushed
+from upmoon_gpio import TrinamicsMotor, Stepper, PWM, DCBrushed
+from std_msgs.msg import Float64
 import rospy
 import RPi.GPIO as GPIO
 
@@ -46,6 +47,24 @@ class MotorDriver:
 
     def create_depositor(self):
         self.motors.append(PWM(topic='/motor/depositor_actuator', pin=20, freq=50, min_dc=0, max_dc=100, init_range=0, sleep_rate=self.rate))
+
+        # Depositor linear actuators - Plan A 
+        self.motors.append(DCBrushed(topic='/motor/depositor_lift', address=128, motor_num=2, sleep_rate=self.rate, max_power=57.1))
+
+        # Depositor linear actuators - Plan B
+        # Comment out Plan A and uncomment Plan B if we cannot run the two motors on the same motor controller.
+        # Note: A sabertooth has two motor controllers.
+        # Uncomment the lines below.
+        # dep_lift_a = DCBrushed(topic='/motor/depositor_lift_a', address=129, motor_num=1, sleep_rate=self.rate, max_power=57.1)
+        # dep_lift_b = DCBrushed(topic='/motor/depositor_lift_b', address=129, motor_num=2, sleep_rate=self.rate, max_power=57.1)
+        # self.motors.append(dep_lift_a)
+        # self.motors.append(dep_lift_b)
+
+        # def depositor_lift_cb(data: Float64):
+        #     dep_lift_a.drive(data.data)
+        #     dep_lift_b.drive(data.data)
+
+        # rospy.Subscriber('/motor/depositor_lift', Float64, depositor_lift_cb)
 
 
 if __name__ == '__main__':

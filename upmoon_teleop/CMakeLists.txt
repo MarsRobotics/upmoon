@@ -162,7 +162,7 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/teleop_joy.py
-  scripts/action_client.py
+  scripts/articulate_client.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

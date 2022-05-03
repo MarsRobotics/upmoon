@@ -52,12 +52,18 @@
   <build_depend>actionlib</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>upmoon_action_msg</build_depend>
+  <build_depend>urdfdom_py</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
   <build_export_depend>actionlib</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>upmoon_action_msg</build_export_depend>
+  <build_export_depend>urdfdom_py</build_export_depend>
+  <build_export_depend>dynamic_reconfigure</build_export_depend>
   <exec_depend>actionlib</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>upmoon_action_msg</exec_depend>
+  <exec_depend>urdfdom_py</exec_depend>
+  <exec_depend>dynamic_reconfigure</exec_depend>
   <!-- <exec_depend>message_runtime</exec_depend> -->
 
 

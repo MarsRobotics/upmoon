@@ -4,4 +4,6 @@
     <node pkg="upmoon_base" type="upmoon_node" name="upmoon_node" />
     
     <node pkg="upmoon_gpio" type="motor_drivers" name="motor_drivers" />
+
+    <node pkg="upmoon_action" type="articulate.py" name="action_articulate" />
 </launch>
