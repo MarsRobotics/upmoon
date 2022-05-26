@@ -96,14 +96,14 @@
     type="continuous">
     <origin
       xyz="0.39333 0.18733 0.15178"
-      rpy="0 0 0" />
+      rpy="0 0 1.57" />
     <parent
       link="base_link" />
     <child
       link="ankle_lf_link" />
     <axis
       xyz="0 0 1" />
-    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
+    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />ankle_lf_joint
   </joint>
   <transmission name="ankle_lf_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -346,14 +346,14 @@
     type="continuous">
     <origin
       xyz="-0.41873 0.18733 0.15178"
-      rpy="0 0 0" />
+      rpy="0 0 1.57" />
     <parent
       link="base_link" />
     <child
       link="ankle_lb_link" />
     <axis
       xyz="0 0 -1" />
-    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
+    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />
   </joint>
   <transmission name="ankle_lb_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -471,14 +471,14 @@
     type="continuous">
     <origin
       xyz="0.39333 -0.18733 0.15178"
-      rpy="0 0 0" />
+      rpy="0 0 1.57" />
     <parent
       link="base_link" />
     <child
       link="ankle_rf_link" />
     <axis
       xyz="0 0 -1" />
-    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
+    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />
   </joint>
   <transmission name="ankle_rf_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -721,14 +721,14 @@
     type="continuous">
     <origin
       xyz="-0.41873 -0.18733 0.15178"
-      rpy="0 0 0" />
+      rpy="0 0 1.57" />
     <parent
       link="base_link" />
     <child
       link="ankle_rb_link" />
     <axis
       xyz="0 0 1" />
-    <limit effort="27" velocity="0.8727" lower="0" upper="3.1415" />
+    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />
   </joint>
   <transmission name="ankle_rb_trans">
     <type>transmission_interface/SimpleTransmission</type>
