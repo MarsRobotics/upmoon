@@ -45,6 +45,8 @@ class RobotLeg:
         is_left_leg = -1 if leg_name[0] == 'l' else 1
 
         self.ankle_z_axis = urdf_ankle.axis[2]  # index 2 is z axis and the value is 1 or -1
+
+        self.ankle_offset = self.ankle_z_axis * urdf_ankle.origin.rpy[2]
  
         self.wheel_dir_correction = is_left_leg * self.ankle_z_axis  # Determine the sign (1 or -1)
         self.ankle_topic = rospy.Publisher('/ankle_' + leg_name + '_controller/command', Float64, queue_size=10)
@@ -99,8 +101,21 @@ class ArticulateActionServer:
 
         # Calculate duration of action
         curr_angles = self.get_all_angles() 
-        goal_angles = [goal.lf, goal.lm, goal.lb, goal.rf, goal.rm, goal.rb]
+        goal_angles = [goal.lf - self._leg_dict["lf"].ankle_offset,
+                       goal.lm - self._leg_dict["lm"].ankle_offset,
+                       goal.lb - self._leg_dict["lb"].ankle_offset,
+                       goal.rf - self._leg_dict["rf"].ankle_offset,
+                       goal.rm - self._leg_dict["rm"].ankle_offset,
+                       goal.rb - self._leg_dict["rb"].ankle_offset]
+
+        # Do not allow goal angles less than 0.
+        goal_angles = [0 if angle < 0 else angle for angle in goal_angles] 
+        
         net_angles = [g - c for g, c in zip(goal_angles, curr_angles)]
+
+        rospy.loginfo("Curr: " + ",".join(str(x) for x in curr_angles))
+        rospy.loginfo("Goal: " + ",".join(str(x) for x in goal_angles))
+        rospy.loginfo("Net: " + ",".join(str(x) for x in net_angles))
 
         threads: List[threading.Thread] = []
 
@@ -225,6 +240,8 @@ class ArticulateActionServer:
 
         # Correct ankle by axis rotation.
         yaw = yaw * self._leg_dict[ankle_name].ankle_z_axis
+
+        yaw -= self._leg_dict[ankle_name].ankle_offset
 
         return yaw
 

@@ -346,7 +346,7 @@
     type="continuous">
     <origin
       xyz="-0.41873 0.18733 0.15178"
-      rpy="0 0 1.57" />
+      rpy="0 0 -1.57" />
     <parent
       link="base_link" />
     <child
@@ -471,7 +471,7 @@
     type="continuous">
     <origin
       xyz="0.39333 -0.18733 0.15178"
-      rpy="0 0 1.57" />
+      rpy="0 0 -1.57" />
     <parent
       link="base_link" />
     <child
