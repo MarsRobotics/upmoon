@@ -103,7 +103,7 @@
       link="ankle_lf_link" />
     <axis
       xyz="0 0 1" />
-    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />ankle_lf_joint
+    <limit effort="27" velocity="0.8727" lower="1.57" upper="3.1415" />
   </joint>
   <transmission name="ankle_lf_trans">
     <type>transmission_interface/SimpleTransmission</type>
