@@ -53,7 +53,6 @@ class TeleopJoy:
                               rf=rad,
                               rm=rad,
                               rb=rad)
-        self.articulate_action.cancel_all_goals()
 
         self.articulate_event.set()
 
@@ -68,7 +67,6 @@ class TeleopJoy:
                               rf=self.ANKLE_TURN,
                               rm=self.ANKLE_PACK_OUT,
                               rb=self.ANKLE_TURN)
-        self.articulate_action.cancel_all_goals()
 
         self.articulate_event.set()
         self.articulate_action.send_goal(goal, done_cb=lambda *_: self.articulate_event.clear())
