@@ -108,9 +108,10 @@ class ArticulateActionServer:
                        goal.rm - self._leg_dict["rm"].ankle_offset,
                        goal.rb - self._leg_dict["rb"].ankle_offset]
 
-        # Do not allow goal angles less than 0.
-        goal_angles = [0 if angle < 0 else angle for angle in goal_angles] 
-        
+        # Do not allow goal angles outside 180 degrees
+        goal_angles = [-1.57 if angle < -1.57 else angle for angle in goal_angles] 
+        goal_angles = [1.57 if angle > 1.57 else angle for angle in goal_angles]
+
         net_angles = [g - c for g, c in zip(goal_angles, curr_angles)]
 
         rospy.loginfo("Curr: " + ",".join(str(x) for x in curr_angles))

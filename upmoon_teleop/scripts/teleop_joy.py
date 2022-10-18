@@ -12,7 +12,7 @@ class TeleopJoy:
 
     SPEED_LINEAR = 1    # Max velocity for a linear twist vector
     SPEED_ANGULAR = 1   # Max velocity for an angular twist vector
-    ANKLE_PACK_IN = 0
+    ANKLE_PACK_IN = 3.14
     ANKLE_PACK_OUT = 3.14
     ANKLE_TURN = 2.36
     DIGGING_ANGLE_COEF = -2
