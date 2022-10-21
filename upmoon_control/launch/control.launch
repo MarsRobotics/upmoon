@@ -12,10 +12,8 @@
               state_controller
               diff_drive_controller
               ankle_lf_controller
-              ankle_lm_controller
               ankle_lb_controller
               ankle_rf_controller
-              ankle_rm_controller
               ankle_rb_controller
               dig_angle_controller"/>
 

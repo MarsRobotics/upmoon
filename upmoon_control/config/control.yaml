@@ -6,9 +6,7 @@ ankle_lf_controller:
   type: position_controllers/JointPositionController
   joint: ankle_lf_joint
 
-ankle_lm_controller:
-  type: position_controllers/JointPositionController
-  joint: ankle_lm_joint
+
 
 ankle_lb_controller:
   type: position_controllers/JointPositionController
@@ -18,9 +16,7 @@ ankle_rf_controller:
   type: position_controllers/JointPositionController
   joint: ankle_rf_joint
 
-ankle_rm_controller:
-  type: position_controllers/JointPositionController
-  joint: ankle_rm_joint
+
 
 ankle_rb_controller:
   type: position_controllers/JointPositionController
