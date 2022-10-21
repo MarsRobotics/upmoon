@@ -4,6 +4,9 @@ from rospy import sleep
 import rospy
 import math
 from threading import Lock
+from std_msgs.msg import Float64
+
+#TODO: implement error correction using encoder data (PID? or simpler?)
 
 class Stepper(MotorListener):
 
@@ -12,7 +15,7 @@ class Stepper(MotorListener):
     total_motors = 0
     disabled_motors = 0
 
-    def __init__(self, topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
+    def __init__(self, topic, encoder_topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
         """
         A stepper motor class originally made for the Geckodrive G213V
             
@@ -31,6 +34,10 @@ class Stepper(MotorListener):
         """
         super().__init__(topic)
         GPIO.setwarnings(False)  # Disable warnings from multiple motors using same enable pin.
+
+        # get data from encoder through subscriber
+        rospy.Subscriber(encoder_topic, Float64, callback=self.update_pos) 
+        self.encoder_angle = None
 
         self.steps_per_turn = steps_per_rev*revs_per_turn #How many steps the motor must turn to turn the output device one full revolution
         self.curr_angle = 0
@@ -111,6 +118,10 @@ class Stepper(MotorListener):
         sleep(self.delay/1000)
         self.position += 1 if (self.direction == 0) else -1
         self.step_count -= 1
+    
+    # new def used to update pos value from encoder
+    def update_pos(self, msg):
+        self.encoder_angle = msg.data * 180 / math.pi 
 
     def getAngle(self):
         self.curr_angle = self.position * 360 / self.steps_per_turn

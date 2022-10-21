@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+from EncoderListener import EncoderListener
+import rospy
+
+# this script is similar to motor_drivers and is used to initialize each encoder object and create
+# a ROS node which publishes the encoder data
+class InitEncoders:
+
+    def __init__(self, rate: rospy.Rate):
+        self.rate = rate
+        self.encoders = []
+
+        self.create_encoders()
+
+        rospy.loginfo("Initialized encoder listeners")
+
+        for encoder in self.encoders:
+            encoder.start()
+
+
+    def create_encoders(self):
+            self.encoders.append(EncoderListener(pub_topic="/encoder/lf_angle", ankle_name="lf", sleep_rate=self.rate))
+            self.encoders.append(EncoderListener(pub_topic="/encoder/lb_angle", ankle_name="lb", sleep_rate=self.rate))
+            self.encoders.append(EncoderListener(pub_topic="/encoder/rf_angle", ankle_name="rf", sleep_rate=self.rate))
+            self.encoders.append(EncoderListener(pub_topic="/encoder/rb_angle", ankle_name="rb", sleep_rate=self.rate))
+
+
+if __name__ == '__main__':
+    rospy.init_node('encoder_listeners')
+
+    enc = InitEncoders(rospy.Rate(300))
+
+    rospy.spin()
