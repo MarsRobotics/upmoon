@@ -4,7 +4,7 @@ from rospy import sleep
 import rospy
 import math
 from threading import Lock
-from std_msgs.msg import Float64
+from std_msgs.msg import UInt16
 
 #TODO: implement error correction using encoder data (PID? or simpler?)
 
@@ -36,7 +36,7 @@ class Stepper(MotorListener):
         GPIO.setwarnings(False)  # Disable warnings from multiple motors using same enable pin.
 
         # get data from encoder through subscriber
-        rospy.Subscriber(encoder_topic, Float64, callback=self.update_pos) 
+        rospy.Subscriber(encoder_topic, UInt16, callback=self.update_pos) 
         self.encoder_angle = None
 
         self.steps_per_turn = steps_per_rev*revs_per_turn #How many steps the motor must turn to turn the output device one full revolution
@@ -121,7 +121,7 @@ class Stepper(MotorListener):
     
     # new def used to update pos value from encoder
     def update_pos(self, msg):
-        self.encoder_angle = msg.data * 180 / math.pi 
+        self.encoder_angle = (msg.data * 250) / 1023
 
     def getAngle(self):
         self.curr_angle = self.position * 360 / self.steps_per_turn

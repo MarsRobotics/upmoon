@@ -32,12 +32,12 @@ class MotorDriver:
 
 
     def create_articulators(self):
-        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", encoder_topic="/encoder/lf_angle", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", encoder_topic="/encoder/lf_ankle", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
         #self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=21, dir_pin=4, step_pin=17, sleep_rate=self.rate)) # removed motor
-        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", encoder_topic="/encoder/lb_angle", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", encoder_topic="/encoder/rf_angle", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", encoder_topic="/encoder/lb_ankle", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", encoder_topic="/encoder/rf_ankle", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
         #self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=21, dir_pin=19, step_pin=26, sleep_rate=self.rate)) # removed motor
-        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", encoder_topic="/encoder/rb_angle", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", encoder_topic="/encoder/rb_ankle", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
 
 
     def create_excavator(self):
