@@ -21,7 +21,7 @@ REFRESH_RATE = 4
 REFRESH_RATE_TF2 = 10
 URDF_TIMEOUT_SEC = 5
 
-LEG_NAMES = ["lf", "lm", "lb", "rf", "rm", "rb"]
+LEG_NAMES = ["lf", "lb", "rf", "rb"]
 
 SWITCH_SERVICE = "/controller_manager/switch_controller"
 DIFF_DRIVE_CONTROLLERS = ["diff_drive_controller"]
@@ -102,10 +102,8 @@ class ArticulateActionServer:
         # Calculate duration of action
         curr_angles = self.get_all_angles() 
         goal_angles = [goal.lf - self._leg_dict["lf"].ankle_offset,
-                       goal.lm - self._leg_dict["lm"].ankle_offset,
                        goal.lb - self._leg_dict["lb"].ankle_offset,
                        goal.rf - self._leg_dict["rf"].ankle_offset,
-                       goal.rm - self._leg_dict["rm"].ankle_offset,
                        goal.rb - self._leg_dict["rb"].ankle_offset]
 
         # Do not allow goal angles outside 180 degrees

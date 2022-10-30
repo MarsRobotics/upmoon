@@ -48,10 +48,8 @@ class TeleopJoy:
     """
     def ankle_set(self, rad: float):
         goal = ArticulateGoal(lf=rad,
-                              lm=rad,
                               lb=rad,
                               rf=rad,
-                              rm=rad,
                               rb=rad)
 
         self.articulate_event.set()
@@ -62,10 +60,8 @@ class TeleopJoy:
 
     def turn_state(self):
         goal = ArticulateGoal(lf=self.ANKLE_TURN,
-                              lm=self.ANKLE_PACK_OUT,
                               lb=self.ANKLE_TURN,
                               rf=self.ANKLE_TURN,
-                              rm=self.ANKLE_PACK_OUT,
                               rb=self.ANKLE_TURN)
 
         self.articulate_event.set()
