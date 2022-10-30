@@ -15,8 +15,8 @@ class TeleopJoy:
     ANKLE_PACK_IN = 3.14
     ANKLE_PACK_OUT = 3.14
     ANKLE_TURN = 2.36
-    DIGGING_ANGLE_COEF = -2
-    DIGGING_SPEED_MAX = 100 # Max percentage of power for digging
+    DIGGING_ANGLE_COEF = -5
+    DIGGING_SPEED_MAX = 10 # Max percentage of power for digging
     DIGGING_SPEED_MIN = 0
     DEPOSIT_ACT_TOGGLE_INIT = 0
     DEPOSIT_LIFT_TOGGLE_INIT = 100
