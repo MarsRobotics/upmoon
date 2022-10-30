@@ -81,6 +81,7 @@ void UPMoonHardware::write()
     for (int i = 0; i < 6; i++) {
         std_msgs::Float64 msg;
         msg.data = ankle_joints_[i].command;
+        ankle_joints_[i].position = msg.data;//Remove when encoders are implemented (use read() instead)
         ankle_joints_[i].topic.publish(msg);
     }
 
