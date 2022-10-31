@@ -1,9 +1,7 @@
 #goal definition
 float64 lf
-float64 lm
 float64 lb
 float64 rf
-float64 rm
 float64 rb
 ---
 #result definition

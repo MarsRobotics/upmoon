@@ -31,7 +31,7 @@ private:
     };
 
     struct Joint drive_joints_[6];
-    struct Joint ankle_joints_[6];
+    struct Joint ankle_joints_[4];
     struct Joint dig_angle_joint_;
 
     // velocity interface is for drive train and position is for ankle motors
