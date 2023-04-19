@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from upmoon_gpio import TrinamicsMotor, Stepper, PWM, DCBrushed
+from upmoon_gpio import TrinamicsMotor, Stepper, PWM, DCBrushed, Encoder
 from std_msgs.msg import Float64
 import rospy
 import RPi.GPIO as GPIO
@@ -21,6 +21,12 @@ class MotorDriver:
         for motor in self.motors:
             motor.start()
 
+    def create_encoder(self):
+        #need to set pin numbers
+        self.motors.append(Encoder(topic="/motor/encoder_lf", ankle_name="lf", pinA=17, pinB=22, sleep_rate=self.rate))
+        self.motors.append(Encoder(topic="/motor/encoder_lb", ankle_name="lb", pinA=17, pinB=22, sleep_rate=self.rate))
+        self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
+        self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
 
     def create_drivetrain(self):
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", sleep_rate=self.rate, motor_id=1, reverse_dir=True))
@@ -32,12 +38,12 @@ class MotorDriver:
 
 
     def create_articulators(self):
-        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lf_joint", encoder_topic="/motor/encoder_lf", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
         self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=21, dir_pin=4, step_pin=17, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_lb_joint", encoder_topic="/motor/encoder_lb", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rf_joint", encoder_topic="/motor/encoder_rf", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
         self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=21, dir_pin=19, step_pin=26, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic="/motor/ankle_rb_joint", encoder_topic="/motor/encoder_rb", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
 
 
     def create_excavator(self):
