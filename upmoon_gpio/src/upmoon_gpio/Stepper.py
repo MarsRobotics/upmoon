@@ -41,7 +41,7 @@ class Stepper(MotorListener):
         self.direction = 0
         self.running = False
         GPIO.setmode(GPIO.BCM)
-        rospy.Subscriber(encoder_topic, Float64, encoderCall)
+        rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
         self.dis_pin = disable_pin
         self.dir_pin = dir_pin
         self.step_pin = step_pin
@@ -134,5 +134,5 @@ class Stepper(MotorListener):
     def on_exit(self):
         pass
 
-    def encoderCall(data):
-        Stepper.current_encoder_angle = data
+    def encoderCall(self, data):
+        self.current_encoder_angle = data.data
