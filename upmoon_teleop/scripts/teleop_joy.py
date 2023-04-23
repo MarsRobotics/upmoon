@@ -41,6 +41,7 @@ class TeleopJoy:
         #these are for the stepper motor lift implementation
         self.pub_depositor_lift_l = rospy.Publisher('/motor/deposit_lift_l', Float64, queue_size=10)
         self.pub_depositor_lift_r = rospy.Publisher('/moror/deposit_lift_r', Float64, queue_size=10)
+        self.pub_depositor_actuator = rospy.Publisher('/motor/dump_door', Float64, queue_size=10) #not sure if this is right
 
         # self.deposit_act_toggle = self.DEPOSIT_ACT_TOGGLE_INIT
         # self.deposit_lift_toggle = self.DEPOSIT_LIFT_TOGGLE_INIT
@@ -184,12 +185,14 @@ class TeleopJoy:
         self.pub_dig_angle_speed.publish(Float64(dig_angle_speed))
 
         # Use Triangle / Y Button for opening/closing deposition (press to open and press to close)
-        if (joy_msg.buttons[2]):
-            if (self.deposit_act_toggle == 0) :
-                self.deposit_act_toggle = 100
-            else:
-                self.deposit_act_toggle = 0
-            self.pub_depositor_actuator.publish(self.deposit_act_toggle)
+        while (joy_msg.buttons[2]):
+            # if (self.deposit_act_toggle == 0) :
+                # self.deposit_act_toggle = 100
+            # else:
+                # self.deposit_act_toggle = 0
+            # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
+            self.pub_depositor_actuator.publish(1)
+        self.pub_depositor_actuator.publish(0)
 
         # Use the Square Button for raising/lowering deposition lift
         if (joy_msg.buttons[3]):

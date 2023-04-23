@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from upmoon_gpio import TrinamicsMotor, Stepper, PWM, DCBrushed
+from upmoon_gpio import TrinamicsMotor, Stepper, PWM, DCBrushed, LinearActuator
 from std_msgs.msg import Float64
 import rospy
 import RPi.GPIO as GPIO
@@ -52,12 +52,11 @@ class MotorDriver:
         # Depositor linear actuators - Plan A 
         # self.motors.append(DCBrushed(topic='/motor/depositor_lift', address=128, motor_num=2, sleep_rate=self.rate, max_power=57.1))
         
-        #Treat the linear actuators as one motor 
-        # self.motors.append(PWM(topic='/motor/dump_door', pin= , freq=50, min_dc=0, max_dc=100, init_range=0, sleep_rate=self.rate))
-        
         #cheeky hack where both steps have same dir setting
         self.motors.append(Stepper(topic='/motor/deposit_lift_l', disable_pin=21, dir_pin= 12, step_pin= 35, sleep_rate=self.rate))
         self.motors.append(Stepper(topic='/motor/deposit_lift_r', disable_pin=21, dir_pin= 12, step_pin= 37, sleep_rate=self.rate))
+        #treat linear actuator as one motor 
+        self.motors.append(LinearActuator(topic='/motor/dump_door', act_pin=24))
 
         # Depositor linear actuators - Plan B
         # Comment out Plan A and uncomment Plan B if we cannot run the two motors on the same motor controller.
