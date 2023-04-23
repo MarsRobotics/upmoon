@@ -12,11 +12,11 @@ class TeleopJoy:
 
     SPEED_LINEAR = 1    # Max velocity for a linear twist vector
     SPEED_ANGULAR = 1   # Max velocity for an angular twist vector
-    ANKLE_PACK_IN = 0
+    ANKLE_PACK_IN = 3.14
     ANKLE_PACK_OUT = 3.14
-    ANKLE_TURN = 2.36
-    DIGGING_ANGLE_COEF = -2
-    DIGGING_SPEED_MAX = 100 # Max percentage of power for digging
+    ANKLE_TURN = 2.00
+    DIGGING_ANGLE_COEF = -5
+    DIGGING_SPEED_MAX = 10 # Max percentage of power for digging
     DIGGING_SPEED_MIN = 0
     DEPOSIT_ACT_TOGGLE_INIT = 0
     DEPOSIT_LIFT_TOGGLE_INIT = 100
@@ -60,10 +60,8 @@ class TeleopJoy:
     """
     def ankle_set(self, rad: float):
         goal = ArticulateGoal(lf=rad,
-                              lm=rad,
                               lb=rad,
                               rf=rad,
-                              rm=rad,
                               rb=rad)
 
         self.articulate_event.set()
@@ -74,10 +72,8 @@ class TeleopJoy:
 
     def turn_state(self):
         goal = ArticulateGoal(lf=self.ANKLE_TURN,
-                              lm=self.ANKLE_PACK_OUT,
                               lb=self.ANKLE_TURN,
                               rf=self.ANKLE_TURN,
-                              rm=self.ANKLE_PACK_OUT,
                               rb=self.ANKLE_TURN)
 
         self.articulate_event.set()

@@ -5,6 +5,7 @@ import upmoon_action_msg.msg
 import tf2_ros
 import math
 import threading
+import time
 from typing import List
 from actionlib import SimpleActionServer
 from dynamic_reconfigure.server import Server as DynamicReconfigureServer
@@ -21,7 +22,7 @@ REFRESH_RATE = 4
 REFRESH_RATE_TF2 = 10
 URDF_TIMEOUT_SEC = 5
 
-LEG_NAMES = ["lf", "lm", "lb", "rf", "rm", "rb"]
+LEG_NAMES = ["lf", "lb", "rf", "rb"]
 
 SWITCH_SERVICE = "/controller_manager/switch_controller"
 DIFF_DRIVE_CONTROLLERS = ["diff_drive_controller"]
@@ -102,15 +103,14 @@ class ArticulateActionServer:
         # Calculate duration of action
         curr_angles = self.get_all_angles() 
         goal_angles = [goal.lf - self._leg_dict["lf"].ankle_offset,
-                       goal.lm - self._leg_dict["lm"].ankle_offset,
                        goal.lb - self._leg_dict["lb"].ankle_offset,
                        goal.rf - self._leg_dict["rf"].ankle_offset,
-                       goal.rm - self._leg_dict["rm"].ankle_offset,
                        goal.rb - self._leg_dict["rb"].ankle_offset]
 
-        # Do not allow goal angles less than 0.
-        goal_angles = [0 if angle < 0 else angle for angle in goal_angles] 
-        
+        # Do not allow goal angles outside 180 degrees
+        goal_angles = [-1.57 if angle < -1.57 else angle for angle in goal_angles] 
+        goal_angles = [1.57 if angle > 1.57 else angle for angle in goal_angles]
+
         net_angles = [g - c for g, c in zip(goal_angles, curr_angles)]
 
         rospy.loginfo("Curr: " + ",".join(str(x) for x in curr_angles))
@@ -125,7 +125,7 @@ class ArticulateActionServer:
 
         # Determine the total time for the goal action.
         max_angle = max(net_angles)
-        duration = abs(max_angle) / self.ankle_velocity
+        duration =  abs(max_angle) / self.ankle_velocity
         self._result.elapsed_time = round(duration)
 
         # Start rotating each ankle.
@@ -183,7 +183,9 @@ class ArticulateActionServer:
 
         # Calculate the time to move the ankle joint.    
         net_angle = goal_angle - curr_angle
-        duration = abs(net_angle) / self.ankle_velocity
+        duration =  abs(net_angle) / self.ankle_velocity
+        duration += 1.3
+        
 
         # Do nothing if we are already at the angle.
         if abs(net_angle) <= 0:
@@ -193,13 +195,13 @@ class ArticulateActionServer:
         # and direction of goal.
         # (Back two ankles are opposite in direction of the front and middle, and
         #  left wheels spin in opposite in direction than the right.)
-        local_wheel_velocity = self.wheel_velocity * leg.wheel_dir_correction * math.copysign(1, net_angle)
+       # local_wheel_velocity = self.wheel_velocity * leg.wheel_dir_correction * math.copysign(1, net_angle)
 
         # Start the ankle motor.
         leg.ankle_topic.publish(goal_angle)
-
+        time.sleep(.75)#add delay to drive motor
         # Start the drive motor to prevent slipping.
-        leg.wheel_topic.publish(local_wheel_velocity)
+       # leg.wheel_topic.publish(local_wheel_velocity)
 
         # Wait until the ankle has reached the goal position.
         while duration > 0 and not self._thread_exit_event.is_set():
@@ -211,7 +213,7 @@ class ArticulateActionServer:
                 duration -= rate.sleep_dur.to_sec()
 
         # Stop the drive motor.
-        leg.wheel_topic.publish(0)
+       # leg.wheel_topic.publish(0)
 
 
     def get_all_angles(self):    

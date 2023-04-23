@@ -13,8 +13,8 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
     std::string drive_names[6] = {"wheel_lf_joint", "wheel_lm_joint", "wheel_lb_joint",
                                   "wheel_rf_joint", "wheel_rm_joint", "wheel_rb_joint"};
 
-    std::string ankle_names[6] = {"ankle_lf_joint", "ankle_lm_joint", "ankle_lb_joint",
-                                  "ankle_rf_joint", "ankle_rm_joint", "ankle_rb_joint"};
+    std::string ankle_names[4] = {"ankle_lf_joint", "ankle_lb_joint",
+                                  "ankle_rf_joint", "ankle_rb_joint"};
 
     std::string dig_angle_name = "dig_angle_joint";
 
@@ -36,7 +36,7 @@ UPMoonHardware::UPMoonHardware(ros::NodeHandle &nh)
     }
 
     // ankle motors use a position controller
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 4; i++) {
         std::string topic_name = "/motor/" + ankle_names[i];
         ankle_joints_[i].topic = nh.advertise<std_msgs::Float64>(topic_name, 10);
 
@@ -78,9 +78,10 @@ void UPMoonHardware::write()
         drive_joints_[i].topic.publish(msg);
     }
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 4; i++) {
         std_msgs::Float64 msg;
         msg.data = ankle_joints_[i].command;
+        ankle_joints_[i].position = msg.data;//Remove when encoders are implemented (use read() instead)
         ankle_joints_[i].topic.publish(msg);
     }
 
