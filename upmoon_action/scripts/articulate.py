@@ -5,6 +5,7 @@ import upmoon_action_msg.msg
 import tf2_ros
 import math
 import threading
+import time
 from typing import List
 from actionlib import SimpleActionServer
 from dynamic_reconfigure.server import Server as DynamicReconfigureServer
@@ -124,7 +125,7 @@ class ArticulateActionServer:
 
         # Determine the total time for the goal action.
         max_angle = max(net_angles)
-        duration = abs(max_angle) / self.ankle_velocity
+        duration =  abs(max_angle) / self.ankle_velocity
         self._result.elapsed_time = round(duration)
 
         # Start rotating each ankle.
@@ -182,7 +183,9 @@ class ArticulateActionServer:
 
         # Calculate the time to move the ankle joint.    
         net_angle = goal_angle - curr_angle
-        duration = abs(net_angle) / self.ankle_velocity
+        duration =  abs(net_angle) / self.ankle_velocity
+        duration += 1.3
+        
 
         # Do nothing if we are already at the angle.
         if abs(net_angle) <= 0:
@@ -192,13 +195,13 @@ class ArticulateActionServer:
         # and direction of goal.
         # (Back two ankles are opposite in direction of the front and middle, and
         #  left wheels spin in opposite in direction than the right.)
-        local_wheel_velocity = self.wheel_velocity * leg.wheel_dir_correction * math.copysign(1, net_angle)
+       # local_wheel_velocity = self.wheel_velocity * leg.wheel_dir_correction * math.copysign(1, net_angle)
 
         # Start the ankle motor.
         leg.ankle_topic.publish(goal_angle)
-
+        time.sleep(.75)#add delay to drive motor
         # Start the drive motor to prevent slipping.
-        leg.wheel_topic.publish(local_wheel_velocity)
+       # leg.wheel_topic.publish(local_wheel_velocity)
 
         # Wait until the ankle has reached the goal position.
         while duration > 0 and not self._thread_exit_event.is_set():
@@ -210,7 +213,7 @@ class ArticulateActionServer:
                 duration -= rate.sleep_dur.to_sec()
 
         # Stop the drive motor.
-        leg.wheel_topic.publish(0)
+       # leg.wheel_topic.publish(0)
 
 
     def get_all_angles(self):    

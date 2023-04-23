@@ -14,7 +14,7 @@ class TeleopJoy:
     SPEED_ANGULAR = 1   # Max velocity for an angular twist vector
     ANKLE_PACK_IN = 3.14
     ANKLE_PACK_OUT = 3.14
-    ANKLE_TURN = 2.36
+    ANKLE_TURN = 2.00
     DIGGING_ANGLE_COEF = -5
     DIGGING_SPEED_MAX = 10 # Max percentage of power for digging
     DIGGING_SPEED_MIN = 0
