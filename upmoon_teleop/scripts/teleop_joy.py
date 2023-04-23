@@ -21,6 +21,10 @@ class TeleopJoy:
     DEPOSIT_ACT_TOGGLE_INIT = 0
     DEPOSIT_LIFT_TOGGLE_INIT = 100
 
+    #conditions for dumping system
+    DEPOSIT_STEPPER_UP = 3.14
+    DEPOSIT_STEPPER_DOWN = 0
+
     def __init__(self):
         self.pub_twist              = rospy.Publisher('/diff_drive_controller/cmd_vel', Twist, queue_size=10)
 
@@ -29,14 +33,22 @@ class TeleopJoy:
         
         self.pub_dig_spin           = rospy.Publisher('/motor/dig_spin', Float64, queue_size=10)
         self.pub_dig_angle_speed    = rospy.Publisher('/dig_angle_controller/command', Float64, queue_size=10)
-        self.pub_depositor_actuator = rospy.Publisher('/motor/depositor_actuator', Float64, queue_size=10)
-        self.pub_depositor_lift     = rospy.Publisher('/motor/depositor_lift', Float64, queue_size=10)
 
-        self.deposit_act_toggle = self.DEPOSIT_ACT_TOGGLE_INIT
-        self.deposit_lift_toggle = self.DEPOSIT_LIFT_TOGGLE_INIT
+        #these were for old dump system
+        # self.pub_depositor_actuator = rospy.Publisher('/motor/depositor_actuator', Float64, queue_size=10)
+        # self.pub_depositor_lift     = rospy.Publisher('/motor/depositor_lift', Float64, queue_size=10)
+        
+        #these are for the stepper motor lift implementation
+        self.pub_depositor_lift_l = rospy.Publisher('/motor/deposit_lift_l', Float64, queue_size=10)
+        self.pub_depositor_lift_r = rospy.Publisher('/moror/deposit_lift_r', Float64, queue_size=10)
+        self.pub_depositor_actuator = rospy.Publisher('/motor/dump_door', Float64, queue_size=10) #not sure if this is right
 
-        self.pub_depositor_actuator.publish(self.deposit_act_toggle)
-        self.pub_depositor_lift.publish(self.deposit_lift_toggle)
+        # self.deposit_act_toggle = self.DEPOSIT_ACT_TOGGLE_INIT
+        # self.deposit_lift_toggle = self.DEPOSIT_LIFT_TOGGLE_INIT
+        self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
+
+        # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
+        # self.pub_depositor_lift.publish(self.deposit_lift_toggle)
 
         self.prev_joy_msg = None
 
@@ -169,20 +181,23 @@ class TeleopJoy:
         self.pub_dig_angle_speed.publish(Float64(dig_angle_speed))
 
         # Use Triangle / Y Button for opening/closing deposition (press to open and press to close)
-        if (joy_msg.buttons[2]):
-            if (self.deposit_act_toggle == 0) :
-                self.deposit_act_toggle = 100
-            else:
-                self.deposit_act_toggle = 0
-            self.pub_depositor_actuator.publish(self.deposit_act_toggle)
+        while (joy_msg.buttons[2]):
+            # if (self.deposit_act_toggle == 0) :
+                # self.deposit_act_toggle = 100
+            # else:
+                # self.deposit_act_toggle = 0
+            # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
+            self.pub_depositor_actuator.publish(1)
+        self.pub_depositor_actuator.publish(0)
 
         # Use the Square Button for raising/lowering deposition lift
         if (joy_msg.buttons[3]):
-            if (self.deposit_lift_toggle == 100):
-                self.deposit_lift_toggle = -100
+            if (self.deposit_lift_toggle == 3.14):
+                self.deposit_lift_toggle = 0
             else:
-                self.deposit_lift_toggle = 100
-            self.pub_depositor_lift.publish(self.deposit_lift_toggle)
+                self.deposit_lift_toggle = 3.14
+            self.pub_depositor_lift_l.publish(self.deposit_lift_toggle)
+            self.pub_depositor_lift_r.publish(self.deposit_lift_toggle)
 
         self.prev_joy_msg = joy_msg
             
