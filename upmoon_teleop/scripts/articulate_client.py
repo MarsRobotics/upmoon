@@ -5,7 +5,7 @@ from actionlib import SimpleActionClient
 
 NAMESPACE = "action_articulate"
 UNPACKED_ANGLE = 3.14
-TURN_ANGLE = 2.36
+TURN_ANGLE = 2.00
 
 
 def articulate(angle):
