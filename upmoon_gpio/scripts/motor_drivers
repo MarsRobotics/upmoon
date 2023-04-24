@@ -25,10 +25,10 @@ class MotorDriver:
 
     def create_encoder(self):
         #need to set pin numbers
-        self.motors.append(Encoder(topic="/motor/encoder_lf", ankle_name="lf", pinA=17, pinB=22, sleep_rate=self.rate))
+        # self.motors.append(Encoder(topic="/motor/encoder_lf", ankle_name="lf", pinA=17, pinB=22, sleep_rate=self.rate))
         self.motors.append(Encoder(topic="/motor/encoder_lb", ankle_name="lb", pinA=17, pinB=22, sleep_rate=self.rate))
-        self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
-        self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
+        # self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
+        # self.motors.append(Encoder(topic="/motor/encoder_rf", ankle_name="rf", pinA=17, pinB=22, sleep_rate=self.rate))
 
     def create_drivetrain(self):
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", sleep_rate=self.rate, motor_id=1, reverse_dir=True))
