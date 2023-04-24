@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 from rospy import sleep
 import rospy
 import math
-import Encoder
+import Encoder as encoderImport
 from std_msgs.msg import Float64, UInt16MultiArray
 from threading import Lock
 
@@ -21,7 +21,7 @@ class Encoder(MotorListener):
         self.index = self.determineIndex(ankle_name)
         self.updated = True
         self.data = None
-        self.encoder = Encoder.Encoder(pinA,pinB)
+        self.encoder = encoderImport.Encoder(pinA,pinB)
         self.sleep_rate = sleep_rate
 
     #called whenever raspPie sends new info
@@ -31,11 +31,12 @@ class Encoder(MotorListener):
         self.updated = False
 
     #reads the encoder info and then returns the degree
-    def update(self, data):
+    def update(self):
         resolution = 2048
         quadRes = resolution * 4
         anglePerRot = quadRes / 360
         currentPos = self.encoder.read()
+        # self.updated = False
         #could have line to check if encoder has done full rotation
         #and have math to account for that but mechanically that is impossible
         return currentPos * anglePerRot
@@ -56,8 +57,8 @@ class Encoder(MotorListener):
     #run function is used for threading
     def run(self):
         while not rospy.is_shutdown():
-            if not self.updated:
-                self.updated = True
-                self.currAngle.data = self.update(self.data)
-                self.pub.publish(self.currAngle.data)
+            # if not self.updated:
+            self.updated = True
+            self.currAngle.data = self.update()
+            self.pub.publish(self.currAngle.data)
             self.sleep_rate.sleep()

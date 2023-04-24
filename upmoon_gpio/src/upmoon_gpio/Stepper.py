@@ -14,7 +14,7 @@ class Stepper(MotorListener):
     disabled_motors = 0
     current_encoder_angle = 0
 
-    def __init__(self, topic, encoder_topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
+    def __init__(self, topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
         """
         A stepper motor class originally made for the Geckodrive G213V
             
@@ -41,7 +41,24 @@ class Stepper(MotorListener):
         self.direction = 0
         self.running = False
         GPIO.setmode(GPIO.BCM)
-        rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+
+        encoder_topic = ""
+        if "ankle_lf_joint" in topic:
+            encoder_topic = "/motor/encoder_lf"
+            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        if "ankle_lb_joint" in topic:
+            encoder_topic = "/motor/encoder_lb"
+            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        if "ankle_rf_joint" in topic:
+            encoder_topic = "/motor/encoder_rf"
+            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        if "ankle_rb_joint" in topic:
+            encoder_topic = "/motor/encoder_rb"
+            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+
+
+
+
         self.dis_pin = disable_pin
         self.dir_pin = dir_pin
         self.step_pin = step_pin
@@ -90,7 +107,9 @@ class Stepper(MotorListener):
         # Convert radians to degrees
         angle = rad * 180 / math.pi
 
-        self.curr_angle = Stepper.current_encoder_angle
+        #does encoder account for negative in other direciton
+        # self.curr_angle = self.current_encoder_angle * self.position
+        self.curr_angle = self.current_encoder_angle
         self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         
         msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
@@ -135,4 +154,4 @@ class Stepper(MotorListener):
         pass
 
     def encoderCall(self, data):
-        self.current_encoder_angle = data.data
+        self.current_encoder_angle = data
