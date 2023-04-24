@@ -25,7 +25,7 @@ class LinearActuator(MotorListener):
     def actuate(self):
         GPIO.output(self.act_pin, 1)
         sleep(10)
-        stopActuate()
+        self.stopActuate()
 
     def update(self, data):
         if data == 1:
