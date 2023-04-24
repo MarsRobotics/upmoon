@@ -38,6 +38,7 @@ class Encoder(MotorListener):
         currentPos = self.encoder.read()
         result = currentPos * anglePerRot
 
+        #update to rospy
         msg = "Current Location: %d; Current Angle: %d" % (self.index, result)
         rospy.logdebug(msg)
         # self.updated = False
