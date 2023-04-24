@@ -36,10 +36,14 @@ class Encoder(MotorListener):
         quadRes = resolution * 4
         anglePerRot = quadRes / 360
         currentPos = self.encoder.read()
+        result = currentPos * anglePerRot
+
+        msg = "Current Location: %d; Current Angle: %d" % (self.index, result)
+        rospy.logdebug(msg)
         # self.updated = False
         #could have line to check if encoder has done full rotation
         #and have math to account for that but mechanically that is impossible
-        return currentPos * anglePerRot
+        return result
 
     #map indexes of arduino message to ankle names
     def determineIndex(self, ankle):
