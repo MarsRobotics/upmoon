@@ -90,7 +90,7 @@ class Stepper(MotorListener):
         # Convert radians to degrees
         angle = rad * 180 / math.pi
 
-        self.curr_angle = Stepper.current_encoder_angle
+        self.curr_angle = self.current_encoder_angle
         self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         
         msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
