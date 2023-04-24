@@ -181,13 +181,13 @@ class TeleopJoy:
         self.pub_dig_angle_speed.publish(Float64(dig_angle_speed))
 
         # Use Triangle / Y Button for opening/closing deposition (press to open and press to close)
-        while (joy_msg.buttons[2]):
+        if (joy_msg.buttons[2]):
             # if (self.deposit_act_toggle == 0) :
                 # self.deposit_act_toggle = 100
             # else:
                 # self.deposit_act_toggle = 0
             # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
-            self.pub_depositor_actuator.publish(1)
+            self.pub_depositor_actuator.publish(1.0)
         self.pub_depositor_actuator.publish(0)
 
         # Use the Square Button for raising/lowering deposition lift

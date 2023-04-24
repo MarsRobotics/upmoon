@@ -19,7 +19,7 @@ class LinearActuator(MotorListener):
         except Exception: 
             print('Actuator pin failure')
 
-     def stopActuate(self):
+    def stopActuate(self):
         GPIO.output(self.act_pin, 0)
    
     def actuate(self):
