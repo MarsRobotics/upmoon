@@ -116,7 +116,7 @@ class Stepper(MotorListener):
 
     def getAngle(self):
         # self.curr_angle = self.position * 360 / self.steps_per_turn
-        self.curr_angle = Stepper.current_encoder_angle
+        self.curr_angle = self.current_encoder_angle
         return self.curr_angle
 
     def isRunning(self):
