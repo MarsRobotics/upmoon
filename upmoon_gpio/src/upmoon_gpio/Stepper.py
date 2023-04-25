@@ -5,6 +5,7 @@ import rospy
 from std_msgs.msg import Float64
 import math
 from threading import Lock
+import Encoder as encoderImport
 
 class Stepper(MotorListener):
 
@@ -12,7 +13,7 @@ class Stepper(MotorListener):
     motor_count_lock = Lock()
     total_motors = 0
     disabled_motors = 0
-    current_encoder_angle = 0
+
 
     def __init__(self, topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
         """
@@ -42,21 +43,44 @@ class Stepper(MotorListener):
         self.running = False
         GPIO.setmode(GPIO.BCM)
 
+        self.pinA = 0
+        self.pinB = 0
+        # self.current_encoder_angle = 0
+
+        self.hasEncoder = 0
+
         encoder_topic = ""
         if "ankle_lf_joint" in topic:
             encoder_topic = "/motor/encoder_lf"
             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+
+            self.pinA = 17
+            self.pinB = 22
+            self.hasEncoder = 1
         if "ankle_lb_joint" in topic:
             encoder_topic = "/motor/encoder_lb"
             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+
+            self.pinA = 17
+            self.pinB = 22
+            self.hasEncoder = 1
         if "ankle_rf_joint" in topic:
             encoder_topic = "/motor/encoder_rf"
             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+
+            self.pinA = 17
+            self.pinB = 22
+            self.hasEncoder = 1
         if "ankle_rb_joint" in topic:
             encoder_topic = "/motor/encoder_rb"
             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
+            self.pinA = 17
+            self.pinB = 22
+            self.hasEncoder = 1
 
+
+        self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
 
 
         self.dis_pin = disable_pin
@@ -107,11 +131,14 @@ class Stepper(MotorListener):
         # Convert radians to degrees
         angle = rad * 180 / math.pi
 
-        #does encoder account for negative in other direciton
-        self.curr_angle = self.current_encoder_angle * self.position
-        # self.curr_angle = self.current_encoder_angle
-        self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
+        if self.hasEncoder == 1:
+            #does encoder account for negative in other direciton
+            # self.curr_angle = self.readEncoder() * self.position
+            self.curr_angle = self.readEncoder()
+        else:
+            self.curr_angle = self.position * 360 / self.steps_per_turn
         
+        self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
         rospy.logdebug(msg)
 
@@ -120,6 +147,14 @@ class Stepper(MotorListener):
         GPIO.output(self.dir_pin, self.direction)
         self.running = True
         self.enable()
+    
+    def readEncoder(self):
+        resolution = 2048
+        quadRes = resolution * 4
+        anglePerRot = quadRes / 360
+        currentPos = self.encoder.read()
+        result = currentPos * anglePerRot
+        return result
 
     def step(self):
         if self.step_count <= 0:
@@ -135,7 +170,13 @@ class Stepper(MotorListener):
 
     def getAngle(self):
         # self.curr_angle = self.position * 360 / self.steps_per_turn
-        self.curr_angle = self.current_encoder_angle
+        # self.curr_angle = self.current_encoder_angle
+
+        if self.hasEncoder == 1:
+            self.curr_angle = self.readEncoder()
+        else:
+            self.curr_angle = self.position * 360 / self.steps_per_turn
+
         return self.curr_angle
 
     def isRunning(self):
@@ -154,4 +195,5 @@ class Stepper(MotorListener):
         pass
 
     def encoderCall(self, data):
-        self.current_encoder_angle = data
+        #self.current_encoder_angle = data
+        pass
