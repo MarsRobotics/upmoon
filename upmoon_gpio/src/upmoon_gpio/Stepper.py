@@ -108,8 +108,8 @@ class Stepper(MotorListener):
         angle = rad * 180 / math.pi
 
         #does encoder account for negative in other direciton
-        # self.curr_angle = self.current_encoder_angle * self.position
-        self.curr_angle = self.current_encoder_angle
+        self.curr_angle = self.current_encoder_angle * self.position
+        # self.curr_angle = self.current_encoder_angle
         self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         
         msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
