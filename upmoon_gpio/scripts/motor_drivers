@@ -61,8 +61,8 @@ class MotorDriver:
         # self.motors.append(DCBrushed(topic='/motor/depositor_lift', address=128, motor_num=2, sleep_rate=self.rate, max_power=57.1))
         
         #cheeky hack where both steps have same dir setting
-        self.motors.append(Stepper(topic='/motor/deposit_lift_l', disable_pin=21, dir_pin= 12, step_pin= 35, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic='/motor/deposit_lift_r', disable_pin=21, dir_pin= 12, step_pin= 37, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic='/motor/deposit_lift_l', disable_pin=21, dir_pin= 12, step_pin= 25, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic='/motor/deposit_lift_r', disable_pin=21, dir_pin= 12, step_pin= 15, sleep_rate=self.rate))
         #treat linear actuator as one motor 
         self.motors.append(LinearActuator(topic='/motor/dump_door', act_pin=24, sleep_rate=self.rate))
 
