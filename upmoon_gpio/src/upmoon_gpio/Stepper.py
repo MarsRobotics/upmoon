@@ -54,8 +54,8 @@ class Stepper(MotorListener):
             # encoder_topic = "/motor/encoder_lf"
 #             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 17
-            self.pinB = 22
+            self.pinA = 9
+            self.pinB = 11
             self.hasEncoder = 1
         if "ankle_lb_joint" in topic:
             # encoder_topic = "/motor/encoder_lb"
@@ -68,15 +68,15 @@ class Stepper(MotorListener):
             # encoder_topic = "/motor/encoder_rf"
             # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 17
-            self.pinB = 22
+            self.pinA = 4
+            self.pinB = 10
             self.hasEncoder = 1
         if "ankle_rb_joint" in topic:
             # encoder_topic = "/motor/encoder_rb"
             # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 17
-            self.pinB = 22
+            self.pinA = 19
+            self.pinB = 26
             self.hasEncoder = 1
 
 
