@@ -51,29 +51,29 @@ class Stepper(MotorListener):
 
         encoder_topic = ""
         if "ankle_lf_joint" in topic:
-            encoder_topic = "/motor/encoder_lf"
-            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+            # encoder_topic = "/motor/encoder_lf"
+#             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 17
             self.pinB = 22
             self.hasEncoder = 1
         if "ankle_lb_joint" in topic:
-            encoder_topic = "/motor/encoder_lb"
-            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+            # encoder_topic = "/motor/encoder_lb"
+            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 17
             self.pinB = 22
             self.hasEncoder = 1
         if "ankle_rf_joint" in topic:
-            encoder_topic = "/motor/encoder_rf"
-            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+            # encoder_topic = "/motor/encoder_rf"
+            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 17
             self.pinB = 22
             self.hasEncoder = 1
         if "ankle_rb_joint" in topic:
-            encoder_topic = "/motor/encoder_rb"
-            rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+            # encoder_topic = "/motor/encoder_rb"
+            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 17
             self.pinB = 22
@@ -194,6 +194,6 @@ class Stepper(MotorListener):
     def on_exit(self):
         pass
 
-    def encoderCall(self, data):
-        #self.current_encoder_angle = data
-        pass
+    # def encoderCall(self, data):
+    #     #self.current_encoder_angle = data
+    #     pass
