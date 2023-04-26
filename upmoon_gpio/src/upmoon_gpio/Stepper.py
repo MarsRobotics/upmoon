@@ -49,7 +49,7 @@ class Stepper(MotorListener):
 
         self.hasEncoder = 0
 
-        encoder_topic = ""
+        # encoder_topic = ""
         if "ankle_lf_joint" in topic:
             # encoder_topic = "/motor/encoder_lf"
 #             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
