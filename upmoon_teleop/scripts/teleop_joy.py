@@ -32,8 +32,8 @@ class TeleopJoy:
         self.articulate_event       = threading.Event()
         
         self.pub_dig_spin           = rospy.Publisher('/motor/dig_spin', Float64, queue_size=10)
-        self.pub_dig_angle_speed    = rospy.Publisher('/motor/dig_angle_joint', Float64, queue_size=10)
-        # self.pub_dig_angle_speed    = rospy.Publisher('/dig_angle_controller/command', Float64, queue_size=10)
+        # self.pub_dig_angle_speed    = rospy.Publisher('/motor/dig_angle_joint', Float64, queue_size=10)
+        self.pub_dig_angle_speed    = rospy.Publisher('/dig_angle_controller/command', Float64, queue_size=10)
 
         #these were for old dump system
         # self.pub_depositor_actuator = rospy.Publisher('/motor/depositor_actuator', Float64, queue_size=10)

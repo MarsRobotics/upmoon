@@ -16,8 +16,8 @@ class PWM(MotorListener):
         Parameters:
             topic: name of ROS topic to subscribe to
             pin: Board pin of signal (BCM)
-            min_dc: Maximum duty cycle of motor (%)
-            max_dc: Minimum duty cycle of motor (%)
+            min_dc: Minimum duty cycle of motor (%)
+            max_dc: Maximum duty cycle of motor (%)
             init_range: Initial % of the duty cycle range (%)
                         0 = min_dc, 100 = max_dc
             freq: frequency of PWM (hz)
