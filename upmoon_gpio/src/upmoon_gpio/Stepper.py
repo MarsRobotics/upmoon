@@ -49,35 +49,35 @@ class Stepper(MotorListener):
 
         self.hasEncoder = False
         self.encoder = None
-        # encoder_topic = ""
-        if "ankle_lf_joint" in topic:
-            # encoder_topic = "/motor/encoder_lf"
-            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        # # encoder_topic = ""
+        # if "ankle_lf_joint" in topic:
+        #     # encoder_topic = "/motor/encoder_lf"
+        #     # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 9
-            self.pinB = 11
-            self.hasEncoder = True
-        if "ankle_lb_joint" in topic:
-            # encoder_topic = "/motor/encoder_lb"
-            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        #     self.pinA = 9
+        #     self.pinB = 11
+        #     self.hasEncoder = True
+        # if "ankle_lb_joint" in topic:
+        #     # encoder_topic = "/motor/encoder_lb"
+        #     # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 17
-            self.pinB = 22
-            self.hasEncoder = True
-        if "ankle_rf_joint" in topic:
-            # encoder_topic = "/motor/encoder_rf"
-            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        #     self.pinA = 17
+        #     self.pinB = 22
+        #     self.hasEncoder = True
+        # if "ankle_rf_joint" in topic:
+        #     # encoder_topic = "/motor/encoder_rf"
+        #     # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 4
-            self.pinB = 10
-            self.hasEncoder = True
-        if "ankle_rb_joint" in topic:
-            # encoder_topic = "/motor/encoder_rb"
-            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+        #     self.pinA = 4
+        #     self.pinB = 10
+        #     self.hasEncoder = True
+        # if "ankle_rb_joint" in topic:
+        #     # encoder_topic = "/motor/encoder_rb"
+        #     # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
-            self.pinA = 19
-            self.pinB = 26
-            self.hasEncoder = True
+        #     self.pinA = 19
+        #     self.pinB = 26
+        #     self.hasEncoder = True
 
         if self.hasEncoder:
             self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
