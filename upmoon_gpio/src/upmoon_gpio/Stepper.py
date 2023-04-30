@@ -158,12 +158,15 @@ class Stepper(MotorListener):
 
     def step(self):
         if self.step_count <= 0:
-            if abs(self.angleGoal - self.getAngle()) > Stepper.marginError:
-                self.step_count = int(self.steps_per_turn * (self.angleGoal - self.curr_angle) / 360)
-            else:
-                self.disable()
-                self.running = False
-                return
+            # if abs(self.angleGoal - self.getAngle()) > Stepper.marginError:
+            #     self.step_count = int(self.steps_per_turn * (self.angleGoal - self.curr_angle) / 360)
+            # else:
+            #     self.disable()
+            #     self.running = False
+            #     return
+            self.disable()
+            self.running = False
+            return
         GPIO.output(self.step_pin, 1)
         sleep(self.delay/1000)
         GPIO.output(self.step_pin, 0)
