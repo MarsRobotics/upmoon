@@ -47,40 +47,40 @@ class Stepper(MotorListener):
         self.pinB = 0
         # self.current_encoder_angle = 0
 
-        self.hasEncoder = 0
-
+        self.hasEncoder = False
+        self.encoder = None
         # encoder_topic = ""
         if "ankle_lf_joint" in topic:
             # encoder_topic = "/motor/encoder_lf"
-#             rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
+            # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 9
             self.pinB = 11
-            self.hasEncoder = 1
+            self.hasEncoder = True
         if "ankle_lb_joint" in topic:
             # encoder_topic = "/motor/encoder_lb"
             # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 17
             self.pinB = 22
-            self.hasEncoder = 1
+            self.hasEncoder = True
         if "ankle_rf_joint" in topic:
             # encoder_topic = "/motor/encoder_rf"
             # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 4
             self.pinB = 10
-            self.hasEncoder = 1
+            self.hasEncoder = True
         if "ankle_rb_joint" in topic:
             # encoder_topic = "/motor/encoder_rb"
             # rospy.Subscriber(encoder_topic, Float64, self.encoderCall)
 
             self.pinA = 19
             self.pinB = 26
-            self.hasEncoder = 1
+            self.hasEncoder = True
 
-
-        self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
+        if self.hasEncoder:
+            self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
 
 
         self.dis_pin = disable_pin
@@ -130,13 +130,8 @@ class Stepper(MotorListener):
     def setAngle(self, rad):
         # Convert radians to degrees
         angle = rad * 180 / math.pi
-
-        if self.hasEncoder == 1:
-            #does encoder account for negative in other direciton
-            # self.curr_angle = self.readEncoder() * self.position
-            self.curr_angle = self.readEncoder()
-        else:
-            self.curr_angle = self.position * 360 / self.steps_per_turn
+        
+        self.curr_angle = self.getAngle()
         
         self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
         msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
@@ -148,6 +143,9 @@ class Stepper(MotorListener):
         self.running = True
         self.enable()
     
+    #resolution determined by encoder what what switches are found
+    #default is 2048
+    #multiple by 4 since we are a quad res encoder
     def readEncoder(self):
         resolution = 2048
         quadRes = resolution * 4
@@ -172,7 +170,7 @@ class Stepper(MotorListener):
         # self.curr_angle = self.position * 360 / self.steps_per_turn
         # self.curr_angle = self.current_encoder_angle
 
-        if self.hasEncoder == 1:
+        if self.hasEncoder:
             self.curr_angle = self.readEncoder()
         else:
             self.curr_angle = self.position * 360 / self.steps_per_turn

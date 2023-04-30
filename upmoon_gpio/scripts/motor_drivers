@@ -41,10 +41,8 @@ class MotorDriver:
 
     def create_articulators(self):
         self.motors.append(Stepper(topic="/motor/ankle_lf_joint", disable_pin=21, dir_pin=2, step_pin=3, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_lm_joint", disable_pin=21, dir_pin=4, step_pin=17, sleep_rate=self.rate))
         self.motors.append(Stepper(topic="/motor/ankle_lb_joint", disable_pin=21, dir_pin=27, step_pin=5, sleep_rate=self.rate))
         self.motors.append(Stepper(topic="/motor/ankle_rf_joint", disable_pin=21, dir_pin=6, step_pin=13, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic="/motor/ankle_rm_joint", disable_pin=21, dir_pin=19, step_pin=26, sleep_rate=self.rate))
         self.motors.append(Stepper(topic="/motor/ankle_rb_joint", disable_pin=21, dir_pin=18, step_pin=23, sleep_rate=self.rate))
 
 
@@ -61,8 +59,8 @@ class MotorDriver:
         # self.motors.append(DCBrushed(topic='/motor/depositor_lift', address=128, motor_num=2, sleep_rate=self.rate, max_power=57.1))
         
         #cheeky hack where both steps have same dir setting
-        self.motors.append(Stepper(topic='/motor/deposit_lift_l', disable_pin=21, dir_pin= 12, step_pin= 35, sleep_rate=self.rate))
-        self.motors.append(Stepper(topic='/motor/deposit_lift_r', disable_pin=21, dir_pin= 12, step_pin= 37, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic='/motor/deposit_lift_l', disable_pin=21, dir_pin= 12, step_pin= 25, sleep_rate=self.rate))
+        self.motors.append(Stepper(topic='/motor/deposit_lift_r', disable_pin=21, dir_pin= 12, step_pin= 7, sleep_rate=self.rate))
         #treat linear actuator as one motor 
         self.motors.append(LinearActuator(topic='/motor/dump_door', act_pin=24, sleep_rate=self.rate))
 
