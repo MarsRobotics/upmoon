@@ -13,6 +13,7 @@ class Stepper(MotorListener):
     motor_count_lock = Lock()
     total_motors = 0
     disabled_motors = 0
+    marginError = 1.0
 
 
     def __init__(self, topic, disable_pin, dir_pin, step_pin, sleep_rate: rospy.Rate, steps_per_rev=200, revs_per_turn=60, delay=0.3):
@@ -43,6 +44,7 @@ class Stepper(MotorListener):
         self.running = False
         GPIO.setmode(GPIO.BCM)
 
+        self.angleGoal = 0
         self.pinA = 0
         self.pinB = 0
         # self.current_encoder_angle = 0
@@ -129,12 +131,12 @@ class Stepper(MotorListener):
 
     def setAngle(self, rad):
         # Convert radians to degrees
-        angle = rad * 180 / math.pi
+        self.angleGoal = rad * 180 / math.pi
         
         self.curr_angle = self.getAngle()
         
-        self.step_count = int(self.steps_per_turn * (angle - self.curr_angle) / 360)
-        msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, angle, self.step_count, self.curr_angle)
+        self.step_count = int(self.steps_per_turn * (self.angleGoal - self.curr_angle) / 360)
+        msg = "ToRad: %f ToDeg: %d Steps: %d CurrDeg: %d" % (rad, self.angleGoal, self.step_count, self.curr_angle)
         rospy.logdebug(msg)
 
         self.direction = 0 if self.step_count > 0 else 1
@@ -156,9 +158,12 @@ class Stepper(MotorListener):
 
     def step(self):
         if self.step_count <= 0:
-            self.disable()
-            self.running = False
-            return
+            if abs(self.angleGoal - self.getAngle()) > Stepper.marginError:
+                self.step_count = int(self.steps_per_turn * (self.angleGoal - self.curr_angle) / 360)
+            else:
+                self.disable()
+                self.running = False
+                return
         GPIO.output(self.step_pin, 1)
         sleep(self.delay/1000)
         GPIO.output(self.step_pin, 0)
