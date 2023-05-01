@@ -28,7 +28,7 @@ class LinearActuator(MotorListener):
         # self.stopActuate()
 
     def update(self, data):
-        if data == 1:
+        if data >= 1:
             self.actuate()
         else:
             self.stopActuate()
