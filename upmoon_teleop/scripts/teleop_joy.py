@@ -189,7 +189,8 @@ class TeleopJoy:
                 # self.deposit_act_toggle = 0
             # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
             self.pub_depositor_actuator.publish(1.0)
-        self.pub_depositor_actuator.publish(0)
+        if (self.prev_joy_msg.buttons[2] == true):
+            self.pub_depositor_actuator.publish(0.0)
 
         # Use the Square Button for raising/lowering deposition lift
         if (joy_msg.buttons[3]):
