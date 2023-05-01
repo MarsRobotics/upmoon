@@ -32,11 +32,11 @@ class MotorDriver:
 
     def create_drivetrain(self):
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_lf_joint", sleep_rate=self.rate, motor_id=1, reverse_dir=True))
-        self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", sleep_rate=self.rate, motor_id=7, reverse_dir=True))
+        # self.motors.append(TrinamicsMotor(topic="/motor/wheel_lm_joint", sleep_rate=self.rate, motor_id=3, reverse_dir=True))
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_lb_joint", sleep_rate=self.rate, motor_id=4, reverse_dir=True))
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_rf_joint", sleep_rate=self.rate, motor_id=5))
         self.motors.append(TrinamicsMotor(topic="/motor/wheel_rm_joint", sleep_rate=self.rate, motor_id=6))
-        # self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", sleep_rate=self.rate, motor_id=3))
+        self.motors.append(TrinamicsMotor(topic="/motor/wheel_rb_joint", sleep_rate=self.rate, motor_id=7))
 
 
     def create_articulators(self):
