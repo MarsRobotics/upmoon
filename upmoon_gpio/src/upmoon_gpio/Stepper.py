@@ -50,7 +50,7 @@ class Stepper(MotorListener):
         # self.current_encoder_angle = 0
 
         self.hasEncoder = False
-        # self.encoder = None
+        self.encoder = None
         # encoder_topic = ""
         # if "ankle_lf_joint" in topic:
             # encoder_topic = "/motor/encoder_lf"
@@ -81,8 +81,8 @@ class Stepper(MotorListener):
             self.pinB = 26
             self.hasEncoder = True
 
-        # if self.hasEncoder:
-        self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
+        if self.hasEncoder:
+            self.encoder = encoderImport.Encoder(self.pinA,self.pinB)
 
 
         self.dis_pin = disable_pin
