@@ -44,10 +44,10 @@ class Stepper(MotorListener):
         self.running = False
         GPIO.setmode(GPIO.BCM)
 
-        # self.angleGoal = 0
-        # self.pinA = 0
-        # self.pinB = 0
-        # # self.current_encoder_angle = 0
+        self.angleGoal = 0
+        self.pinA = 0
+        self.pinB = 0
+        # self.current_encoder_angle = 0
 
         self.hasEncoder = False
         self.encoder = None
