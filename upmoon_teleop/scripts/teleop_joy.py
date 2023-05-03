@@ -23,7 +23,7 @@ class TeleopJoy:
 
     #conditions for dumping system
     DEPOSIT_STEPPER_UP = 3.14
-    DEPOSIT_STEPPER_DOWN = 0
+    DEPOSIT_STEPPER_DOWN = 6.0
 
     def __init__(self):
         self.pub_twist              = rospy.Publisher('/diff_drive_controller/cmd_vel', Twist, queue_size=10)
@@ -189,17 +189,17 @@ class TeleopJoy:
                 # self.deposit_act_toggle = 0
             # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
             self.pub_depositor_actuator.publish(1.0)
-        if (self.prev_joy_msg.buttons[2] == true):
-            self.pub_depositor_actuator.publish(0.0)
+        #if (self.prev_joy_msg.buttons[2] == true):
+        self.pub_depositor_actuator.publish(0.0)
 
         # Use the Square Button for raising/lowering deposition lift
         if (joy_msg.buttons[3]):
-            if (self.deposit_lift_toggle == 3.14):
-                self.deposit_lift_toggle = 0
+            if (self.deposit_lift_toggle == DEPOSIT_STEPPER_UP):
+                self.deposit_lift_toggle = DEPOSIT_STEPPER_DOWN
             else:
-                self.deposit_lift_toggle = 3.14
-            self.pub_depositor_lift_l.publish(self.deposit_lift_toggle)
+                self.deposit_lift_toggle = DEPOSIT_STEPPER_UP
             self.pub_depositor_lift_r.publish(self.deposit_lift_toggle)
+            self.pub_depositor_lift_l.publish(self.deposit_lift_toggle)
 
         self.prev_joy_msg = joy_msg
             
