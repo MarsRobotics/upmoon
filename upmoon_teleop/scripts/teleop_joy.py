@@ -22,8 +22,12 @@ class TeleopJoy:
     DEPOSIT_LIFT_TOGGLE_INIT = 100
 
     #conditions for dumping system
-    DEPOSIT_STEPPER_UP = 3.14
-    DEPOSIT_STEPPER_DOWN = 6.0
+    #reset: step up: 3.14
+    #step down: 0
+    DEPOSIT_STEPPER_UP = 2.25
+    DEPOSIT_STEPPER_DOWN = 0
+    
+    DEPOSIT_TOGGLE = 0
 
     def __init__(self):
         self.pub_twist              = rospy.Publisher('/diff_drive_controller/cmd_vel', Twist, queue_size=10)
@@ -32,7 +36,7 @@ class TeleopJoy:
         self.articulate_event       = threading.Event()
         
         self.pub_dig_spin           = rospy.Publisher('/motor/dig_spin', Float64, queue_size=10)
-        # self.pub_dig_angle_speed    = rospy.Publisher('/motor/dig_angle_joint', Float64, queue_size=10)
+        #self.pub_dig_angle_speed    = rospy.Publisher('/motor/dig_angle_joint', Float64, queue_size=10)
         self.pub_dig_angle_speed    = rospy.Publisher('/dig_angle_controller/command', Float64, queue_size=10)
 
         #these were for old dump system
@@ -46,6 +50,7 @@ class TeleopJoy:
 
         # self.deposit_act_toggle = self.DEPOSIT_ACT_TOGGLE_INIT
         # self.deposit_lift_toggle = self.DEPOSIT_LIFT_TOGGLE_INIT
+        #start in the down position
         self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
 
         # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
@@ -188,18 +193,26 @@ class TeleopJoy:
             # else:
                 # self.deposit_act_toggle = 0
             # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
-            self.pub_depositor_actuator.publish(1.0)
-        #if (self.prev_joy_msg.buttons[2] == true):
-        self.pub_depositor_actuator.publish(0.0)
+            if (self.DEPOSIT_TOGGLE == 0):
+            	self.DEPOSIT_TOGGLE = 10
+            	self.pub_depositor_actuator.publish(1.0)
+            else:
+            	self.DEPOSIT_TOGGLE = 0
+            	self.pub_depositor_actuator.publish(0.0)
+            #self.pub_depositor_actuator.publish(1.0)
+        #self.pub_depositor_actuator.publish(0)
 
         # Use the Square Button for raising/lowering deposition lift
         if (joy_msg.buttons[3]):
-            if (self.deposit_lift_toggle == DEPOSIT_STEPPER_UP):
-                self.deposit_lift_toggle = DEPOSIT_STEPPER_DOWN
+        #roll back: lift toggle = -2.25
+        # and 0 for the second
+            if (self.deposit_lift_toggle == self.DEPOSIT_STEPPER_DOWN):
+                self.deposit_lift_toggle = self.DEPOSIT_STEPPER_UP
             else:
-                self.deposit_lift_toggle = DEPOSIT_STEPPER_UP
+                self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
             self.pub_depositor_lift_r.publish(self.deposit_lift_toggle)
             self.pub_depositor_lift_l.publish(self.deposit_lift_toggle)
+
 
         self.prev_joy_msg = joy_msg
             
