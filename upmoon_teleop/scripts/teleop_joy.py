@@ -16,16 +16,22 @@ class TeleopJoy:
     ANKLE_PACK_OUT = 3.14
     ANKLE_TURN = 2.00
     DIGGING_ANGLE_COEF = -5
-    DIGGING_SPEED_MAX = 10 # Max percentage of power for digging
-    DIGGING_SPEED_MIN = 0
+    DIGGING_SPEED_MAX = 15 # Max percentage of power for digging
+    DIGGING_SPEED_INCREMENT = 5 # increments dig speed
+    DIGGING_SPEED_MIN = 10 
     DEPOSIT_ACT_TOGGLE_INIT = 0
     DEPOSIT_LIFT_TOGGLE_INIT = 100
+    
+    WHEEL_TURN_COEF = 1
 
     #conditions for dumping system
     #reset: step up: 3.14
     #step down: 0
-    DEPOSIT_STEPPER_UP = 2.25
-    DEPOSIT_STEPPER_DOWN = 0
+    DEPOSIT_STEPPER_UP = 2.2
+    #DEPOSIT_STEPPER_UP = -0.5
+    DEPOSIT_STEPPER_DOWN = 0.25
+    #DEPOSIT_STEPPER_DOWN = 0
+    DEPOSIT_STEPPER_PACK = 0
     
     DEPOSIT_TOGGLE = 0
 
@@ -51,12 +57,38 @@ class TeleopJoy:
         # self.deposit_act_toggle = self.DEPOSIT_ACT_TOGGLE_INIT
         # self.deposit_lift_toggle = self.DEPOSIT_LIFT_TOGGLE_INIT
         #start in the down position
-        self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
+        #self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
+        self.deposit_lift_toggle = self.DEPOSIT_STEPPER_PACK
+        self.digging_counter = 0
+        self.wheel_control = False
 
         # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
         # self.pub_depositor_lift.publish(self.deposit_lift_toggle)
 
         self.prev_joy_msg = None
+        
+        #initial radians of all motors being saved
+        #used to keep track of ankle radian
+        self.lf_prev_rad = 3.14
+        self.lb_prev_rad = 3.14
+        self.rf_prev_rad = 3.14
+        self.rb_prev_rad = 3.14
+        
+        #booleans for deciding which ankle is being controlled individually
+        self.lf_on = False
+        self.rf_on = False
+        self.lb_on = False
+        self.rb_on = False
+        
+        #value for ankle to turn
+        self.wheel_value = 0
+        
+        #value we want ankle to be at
+        self.goal_val = 0.0
+        
+        #values for how much the ankle should rotate
+        self.small_change = 0.1
+        self.big_change = 0.5
 
         rospy.Subscriber('joy', Joy, self.joy_callback)
     
@@ -64,7 +96,40 @@ class TeleopJoy:
     """
     Set all A joints to a radian
     """
+    #Allows for individual ankle motor to be changed (DOES NOT FUNCTION PERFECTLY)
+    #stored desired radian in global value and uses those values accordingly
+    def ankle_set_individual(self,ankle: int, rad: float):
+            
+        if ankle == 0: #no ankle selected
+            return
+             
+        elif ankle == 1: #left front ankle
+            self.lf_prev_rad = rad
+
+        elif ankle == 2: #right front ankle
+            self.rf_prev_rad = rad 
+     	     
+        elif ankle == 3: #left back ankle
+            self.lb_prev_rad = rad
+     	     
+        else: #right back ankle
+            self.rb_prev_rad = rad
+     	     
+        goal = ArticulateGoal(lf=self.lf_prev_rad,
+                              lb=self.lb_prev_rad,
+                              rf=self.rf_prev_rad,
+                              rb=self.rb_prev_rad)
+
+        self.articulate_event.set()
+
+         # Send goal to the action server and ignore the passed args in the callback.
+        self.articulate_action.send_goal(goal, done_cb=lambda *_: self.articulate_event.clear())
+         
     def ankle_set(self, rad: float):
+        self.lf_prev_rad = rad
+        self.lb_prev_rad = rad
+        self.rf_prev_rad = rad
+        self.rb_prev_rad = rad
         goal = ArticulateGoal(lf=rad,
                               lb=rad,
                               rf=rad,
@@ -74,9 +139,14 @@ class TeleopJoy:
 
         # Send goal to the action server and ignore the passed args in the callback.
         self.articulate_action.send_goal(goal, done_cb=lambda *_: self.articulate_event.clear())
+       
 
 
     def turn_state(self):
+        self.lf_prev_rad = self.ANKLE_TURN
+        self.lb_prev_rad = self.ANKLE_TURN
+        self.rf_prev_rad = self.ANKLE_TURN
+        self.rb_prev_rad = self.ANKLE_TURN
         goal = ArticulateGoal(lf=self.ANKLE_TURN,
                               lb=self.ANKLE_TURN,
                               rf=self.ANKLE_TURN,
@@ -120,6 +190,59 @@ class TeleopJoy:
         # X causes soft stop
         if (joy_msg.buttons[0]):
             self.soft_stop()
+            return
+        
+        if joy_msg.buttons[9]: #if start then control each wheel
+            if not self.wheel_control:
+                self.wheel_control = True
+                self.wheel_value = 0
+                self.goal_val = 3.14
+            else:
+                self.wheel_control = False
+            return
+        #if in secondary wheel
+        if self.wheel_control:
+            if joy_msg.buttons[4]: #left front wheel
+                self.wheel_value = 1
+                self.goal_val = self.lf_prev_rad
+            
+            if joy_msg.buttons[5]: #right front wheel
+                self.wheel_value = 2
+                self.goal_val = self.rf_prev_rad
+                   
+            if joy_msg.buttons[6]: #left back wheel
+                self.wheel_value = 3
+                self.goal_val = self.lb_prev_rad
+                   
+            if joy_msg.buttons[7]: #right back wheel
+                self.wheel_value = 4
+                self.goal_val = self.rb_prev_rad
+            
+            
+            if joy_msg.buttons[15]: #hit left move -.1 rads
+                self.goal_val -= self.small_change
+            if joy_msg.buttons[16]: #hit right move .1 rads
+                self.goal_val += self.small_change
+            if joy_msg.buttons[13]: #hit up move up .5
+                self.goal_val += self.big_change
+            if joy_msg.buttons[14]: #hit down by .5
+                self.goal_val -= self.big_change
+            
+            #move ankle
+            self.ankle_set_individual(self.wheel_value, self.goal_val)
+            
+            #sets the dumping box to the starting position and resting position
+            if joy_msg.buttons[3]:
+                if (self.deposit_lift_toggle == self.DEPOSIT_STEPPER_PACK):
+                    self.deposit_lift_toggle = self.DEPOSIT_STEPPER_DOWN
+                else:
+                    self.deposit_lift_toggle = self.DEPOSIT_STEPPER_PACK
+                self.pub_depositor_lift_r.publish(self.deposit_lift_toggle)
+                self.pub_depositor_lift_l.publish(self.deposit_lift_toggle)
+
+            
+	        
+            
             return
         
         # Control driving when we are not articulating A-joints
@@ -172,14 +295,20 @@ class TeleopJoy:
 
         # Control digger speed
         if (joy_msg.buttons[4] and joy_msg.buttons[5]):
-            # ignore as both bumpers are pressed
+            # stop as both bumpers are pressed
+            self.digging_counter = 0
+            self.pub_dig_spin.publish(Float64(0))
             pass
         elif (joy_msg.buttons[4]):
-            # left bumper was pressed => reverse digger
-            self.pub_dig_spin.publish(Float64(0.2*-self.DIGGING_SPEED_MAX))
+            # left bumper was pressed => stop digger
+            self.digging_counter = 0
+            self.pub_dig_spin.publish(Float64(0))
         elif (joy_msg.buttons[5]):
             # right bumper was pressed => forward
-            self.pub_dig_spin.publish(Float64(self.DIGGING_SPEED_MAX))
+            self.digging_counter += 1
+            if self.digging_counter > 7:
+                self.digging_counter = 1
+            self.pub_dig_spin.publish(Float64(10 + ((self.digging_counter - 1) * 5)))
 
         # Right analog stick to raise/lower digger
         r_stick_y = joy_msg.axes[4]
@@ -194,11 +323,11 @@ class TeleopJoy:
                 # self.deposit_act_toggle = 0
             # self.pub_depositor_actuator.publish(self.deposit_act_toggle)
             if (self.DEPOSIT_TOGGLE == 0):
-            	self.DEPOSIT_TOGGLE = 10
-            	self.pub_depositor_actuator.publish(1.0)
+                self.DEPOSIT_TOGGLE = 10
+                self.pub_depositor_actuator.publish(1.0)
             else:
-            	self.DEPOSIT_TOGGLE = 0
-            	self.pub_depositor_actuator.publish(0.0)
+                self.DEPOSIT_TOGGLE = 0
+                self.pub_depositor_actuator.publish(0.0)
             #self.pub_depositor_actuator.publish(1.0)
         #self.pub_depositor_actuator.publish(0)
 
