@@ -305,8 +305,9 @@ class TeleopJoy:
             self.pub_dig_spin.publish(Float64(0))
         elif (joy_msg.buttons[5]):
             # right bumper was pressed => forward
+	    # increments diggering power by 5. Starts from 0, to 10, to 15, 20, 25, 30
             self.digging_counter += 1
-            if self.digging_counter > 7:
+            if self.digging_counter > 5:
                 self.digging_counter = 1
             self.pub_dig_spin.publish(Float64(10 + ((self.digging_counter - 1) * 5)))
 
